@@ -9,7 +9,7 @@
 
 
 
-#FE (실행 방법)
+# FE 
 
 services/pripen/src/main/frontend
 npm install react-scripts --save 실행 (module다운)
