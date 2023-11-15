@@ -1,0 +1,76 @@
+
+.slide-by-issue-container {
+    display: flex;
+}
+
+.slick-prev, .slick-next {
+    z-index: 1; /* 화살표가 다른 요소 위에 나타나게 하려면 필요할 수 있습니다. */
+}
+
+/* paragraph-section의 우측에 위치하도록 조정 */
+.slick-prev {
+    left: -25px; /* 값을 조절하여 원하는 위치로 이동시킵니다 */
+}
+
+/* issue-section의 좌측에 위치하도록 조정 */
+.slick-next {
+    right: -25px; /* 값을 조절하여 원하는 위치로 이동시킵니다 */
+}
+
+.omittedIssuesList > span {
+    border-radius: 100% !important;
+    margin : 3px;
+}
+
+.omittedIssuesList .issue-law-violation  span {
+    width: 23.2px !important;
+    margin-right: 0px !important;
+}
+.omittedIssuesList .issue-law-risk span {
+    width: 23.2px !important;
+    margin-right: 0px !important;
+}
+.omittedIssuesList .issue-guideline span {
+    width: 23.2px !important;
+    margin-right: 0px !important;
+}
+/* styles.css 또는 해당하는 스타일시트 파일 */
+.issueWrapper {
+    position: relative;
+    white-space: normal;
+}
+.issueIcon {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    width: 34px !important;
+    height: 34px !important;
+    align-content: center;
+    align-items: center;
+    margin-bottom: -5px;  /* 아이콘과 popover 사이의 간격을 줄이기 위해 추가 */
+}
+.issueSpan, .issueIcon {
+    white-space: nowrap;
+}
+.popover {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+    padding: 10px;
+    display: flex;
+    width: 100px;
+}
+.IconHoverEvent {
+    border: 1px solid #d9d9d9;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 5px 0 5px 10px;
+    margin: 5px 0 5px 0;
+    width: fit-content;
+    align-items: center;
+    display: flex;  /* inline 요소와 같이 동작하면서 block의 특징을 가짐 */
+}

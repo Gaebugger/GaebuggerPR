@@ -1,0 +1,34 @@
+/* Parent container: vertical layout for the header, content, and button */
+/* Horizontal layout for inspection-steps and priority-items */
+.inspection-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+    align-items: start;
+    flex-grow: 1;
+    position: relative;
+}
+
+.priority-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가로 중앙 정렬 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    margin : 50px auto;
+    /* 기타 스타일 ... */
+}
+
+.priority-items label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.instruction{
+    font-family: "NotoSansKR-SemiBold";
+    height: 150px;
+    font-size: xx-large;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}

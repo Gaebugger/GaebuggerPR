@@ -1,0 +1,95 @@
+.Service-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+.Service-content {
+    padding-top: 60px; /* Adjust this value based on the actual height of your header */
+    width: 100vw;
+    overflow-y: auto;
+    font-family: 'NotoSansKR-Regular' ;
+}
+
+.Service-content > section {
+    width: 100vw;
+    height: 100vh;  /* viewport height */
+    display: flex;
+    align-items: center;
+    justify-content: center;  /* center the content within each section */
+    /* Other styles like padding, margin, etc. as needed */
+}
+
+
+.feature {
+    margin: 20px 0;
+}
+
+.start-button-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.start-button {
+    display: inline-block;
+    padding: 10px 20px;
+    text-align: center;
+    background-color: royalblue;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 10px;
+    text-decoration: none; /* Removes the underline from the anchor */
+    transition: background-color 0.3s; /* For a smooth color transition on hover */
+}
+
+.start-button:hover {
+    background-color: #1e90ff; /* A slightly brighter shade of the original royalblue */
+}
+
+
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;  /* Makes children stack vertically */
+}
+
+.section h2,
+.section p {
+    margin: 0;  /* Remove any default margins */
+    text-align: center;  /* Center the text within the elements */
+}
+.section h2{
+    font-family: 'NotoSansKR-SemiBold';
+    margin-bottom: 40px;
+    font-size: xx-large;
+}
+.section p {
+    margin-bottom: 20px;  /* Add space between p and the following h2 */
+}
+
+.section-button-container {
+    margin-top: 20px;  /* adjust as needed for spacing */
+}
+
+.is-visible {
+    animation: fadeInSlide 1.5s forwards;
+}
+.introduction_service {
+    animation: fadeIn 1.5s forwards;  /* apply the fadeIn animation */
+    opacity: 0;  /* set initial opacity so the animation can fade it in */
+}

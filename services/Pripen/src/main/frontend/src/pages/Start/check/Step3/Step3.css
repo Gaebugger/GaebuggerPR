@@ -1,0 +1,35 @@
+.Validating-layout {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;  /* 중앙에 위치하도록 조정 */
+}
+
+.processing-animation {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 1rem;
+}
+.custom-button {
+    background: linear-gradient(145deg, rgba(0, 128, 255, 0.8), rgba(0, 128, 255, 0.6)); /* 그라디언트 및 투명도 */
+    color: white; /* 폰트 색상: 하얀색 */
+    border: none; /* 테두리 제거 */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 그림자 추가 */
+    border-radius: 20px; /* 둥근 모서리 */
+    padding: 15px 30px; /* 패딩: 버튼 크기 증가 */
+    font-size: 18px; /* 폰트 크기 */
+    transition: all 0.2s; /* 부드러운 전환 효과 */
+}
+
+.custom-button:hover {
+    background: linear-gradient(145deg, rgba(0, 128, 255, 0.9), rgba(0, 128, 255, 0.7)); /* 마우스 오버시 색상 변경 */
+    box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.3); /* 그림자 변경 */
+}
+@keyframes blink {
+    0%   { opacity: 0; }
+    50%  { opacity: 1; }
+    100% { opacity: 0; }
+  }

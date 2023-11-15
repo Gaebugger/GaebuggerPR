@@ -1,0 +1,32 @@
+/* ChatBotBubbleButton.css 파일 내용 */
+.button {
+    /* 기존 스타일 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, max-width 0.3s ease;
+    /* ...기타 스타일... */
+  }
+  
+  .buttonText {
+    display: none;
+    /* 기타 텍스트 스타일 */
+  }
+  
+  .button:hover .buttonText {
+    display: block;
+    /* 호버 시 텍스트가 나타나도록 display 속성 변경 */
+  }
+
+
+/* CSS 파일 */
+.iframe-responsive {
+    width: 100%;
+    height: auto;
+    max-width: 350px; /* 최대 너비를 설정하여 모바일 환경에서도 잘 보이도록 합니다 */
+    max-height: 510px; /* 최대 높이를 설정합니다 */
+  }
+  
+  @media (max-width: 768px) {
+    .iframe-responsive {
+      max-width: 100%; /* 더 작은 화면에서는 창의 전체 너비를 사용합니다 */
+      height: 300px; /* 높이를 줄입니다 */
+    }
+  }

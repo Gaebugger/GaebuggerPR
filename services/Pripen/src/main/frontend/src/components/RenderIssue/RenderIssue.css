@@ -1,0 +1,15 @@
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation-name: fadeIn;
+    animation-duration: 0.5s; /* 페이드 인 효과의 지속 시간. 조정 가능 */
+    animation-fill-mode: forwards;
+}

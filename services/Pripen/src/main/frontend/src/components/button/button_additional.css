@@ -1,0 +1,29 @@
+.property-1additional {
+    position: absolute;
+    top: 110px;
+    left: 20px;
+    width: 440px;
+    height: 70px;
+  }
+
+  .property-1additional-child {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 10px;
+    background-color: #3352a1;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .button1 {
+    position: absolute;
+    height: 61.43%;
+    width: 41.59%;
+    top: 15.71%;
+    left: 29.32%;
+    display: inline-block;
+  }

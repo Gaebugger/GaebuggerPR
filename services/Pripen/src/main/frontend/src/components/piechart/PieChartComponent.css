@@ -1,0 +1,7 @@
+.piechartComponent > div:not(.allNum):not(.pieChartDesc) {
+    width: 130% !important;
+    height: 100% !important;
+}
+.piechartComponent{
+    margin:100px;
+}

@@ -1,0 +1,52 @@
+/* step4.css */
+
+.output-layout {
+    display: flex; /* Flexbox 사용하여 아이템들을 수평으로 배열 */
+    flex-direction: row; /* 수평 방향으로 아이템 배열 */
+    gap: 20px; /* 아이템 간 간격 설정 */
+    align-items: start; /* 아이템들을 상단에 정렬 */
+    padding: 20px;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    overflow: auto; /* 내용이 많을 때 스크롤바 생성 */
+}
+
+.message-section,
+.checked_Items-section,
+.FileContent-section,
+.GuideLines-section {
+    flex: 1; /* 모든 섹션에 동일한 너비 제공 */
+    margin-bottom: 20px; /* 각 섹션 아래 여백 설정 */
+}
+
+.message-section p,
+.checked_Items-section p,
+.FileContent-section p,
+.GuideLines-section p {
+    font-weight: bold; /* 제목 부분을 굵게 */
+    margin-bottom: 8px; /* 제목 아래에 여백 설정 */
+}
+
+.message-section div,
+.checked_Items-section ul,
+.FileContent-section pre,
+.GuideLines-section pre {
+    background-color: #f9f9f9; /* 배경색 지정 */
+    padding: 8px; /* 내부 여백 설정 */
+    border-radius: 5px; /* 테두리 둥글게 */
+    overflow-x: auto; /* 내용이 너무 길 때 스크롤바 생성 */
+}
+.score-whyscore{ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.score-whyscore > *{
+    margin: 70px;
+}
+.score-whyscore .ScoreDisplay{
+    margin-right: 100px;
+
+}

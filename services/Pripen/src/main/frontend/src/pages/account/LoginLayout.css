@@ -1,0 +1,24 @@
+.login-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.background-image {
+    flex: 1;
+    background-size: cover;
+    background-image: radial-gradient(circle, #9dbbdf, #7da1c3 70%, #6891b1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 0 50px rgba(255, 255, 255, 0.3); /* 박스 내부와 외부의 그림자를 조합하여 깊이감 생성 */
+
+    /* 애니메이션 효과 추가 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+
+.login-form {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

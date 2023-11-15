@@ -1,0 +1,65 @@
+.highlight {
+    font-size: 15px;
+    padding: 1px 2px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: transparent;
+    position: relative;
+    display: inline-block;
+    padding-left: 20px;  /* idCircle의 너비만큼 왼쪽에 패딩 추가 */
+    position: relative;
+    vertical-align: top;  /* 추가 */
+    line-height: 1;
+    box-sizing: border-box;  /* 추가 */
+}
+
+.type1 {
+    border: 2px solid red;
+
+}
+.type1 .idCircle {
+    border: 2px solid red;
+    font-size: 10px;
+    color: red;
+
+}
+.type2 {
+    border: 2px solid orange;
+}
+.type2 .idCircle {
+    border: 2px solid orange;
+    font-size: 10px;
+    color: orange;
+}
+.type3 {
+    border: 2px solid green;
+}
+.type3 .idCircle{
+    border: 2px solid green;
+    font-size: 10px;
+    color: green;
+}
+.idCircle {
+    background-color: transparent;
+    color: black; /* 글자 색상을 검정색으로 */
+    font-weight: bold; /* 볼드체로 */
+    border-radius: 100%;
+    width: 12px;
+    height: 12px;
+    position: absolute;  
+    left: 0;  
+    top: 50%;  
+    transform: translateY(-50%);  /* 수직 중앙 정렬 */
+    font-family: "NotoSansKR-Bold";
+    text-align: center;
+    font-size: 14px;
+    z-index: 1;
+    display: inline-block;  /* 박스와 동일 라인에 배치하기 위해 */
+    vertical-align: middle;  /* 중앙 정렬을 위해 */
+    margin-right: 5px;  /* 오른쪽 간격 추가 */
+}   
+
+.MuiToggleButton-root {
+    margin: 5px;
+    padding: 5px 10px;
+}

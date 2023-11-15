@@ -1,0 +1,191 @@
+.header-container {
+    background-color: white;
+    color: black;
+    height: 64px;  /* 헤더의 높이를 64px로 설정 */
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    display: flex;  
+    box-sizing: border-box;   
+    align-items: center;  /* 중앙 정렬 유지 */
+    border-bottom: 1px solid rgb(221, 221, 221);
+    font-family: 'NotoSansKR-Medium';
+    transform: translate(0px);
+    opacity: 1;
+    overflow: visible;
+    visibility: inherit;
+    box-sizing: inherit;
+}
+.header-container .logo {
+    flex-shrink: 0;
+}
+
+.header-container .logo > Link, .logo a {
+    display: block; 
+    width: 100px;
+    height: 38.4px;
+}
+.header-container .logo img {
+    display: flex; 
+    width: 100%; 
+    height: auto; 
+}
+.logo_menu{
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    margin-left: -28px;
+    margin-right: -28px;
+    height: 100%;
+
+}
+
+
+
+
+
+.menu-structure a, .authentication a {
+    text-decoration: none; 
+    color: black;
+}
+
+.logo, .authentication {
+    display: flex;
+}
+
+
+.logo {
+    justify-content: flex-start;
+    padding-left: 10vw;
+    padding-right: 28px;
+}
+.logo > Link, .logo a { 
+    display: inline-block; 
+}
+
+/* Navigation Styles */
+nav.menu-structure {
+    left: 80px;
+    display: block;
+    width: auto;
+    position: relative;
+    line-height: 1;
+    text-align: center;
+    z-index: 1;
+    height: 100%;
+}
+
+nav.menu-structure ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    align-items: center;
+}
+
+nav.menu-structure li {
+    margin-left: 15px;   /* 각 메뉴 항목 간의 간격 */
+    margin-right: 30px;
+    height: 100%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 기존의 .platform 과 같은 클래스 스타일링은 필요에 따라 추가 */
+
+
+.authentication {
+    justify-content: flex-end; 
+    padding-right: 6rem;
+    right: 0;
+    position: absolute;
+}
+
+.active-link{
+    position: relative; /* Establish a stacking context for pseudo-elements */
+}
+nav.menu-structure .active-link {
+    color: #4287f5;
+}
+
+.active-link:after {
+    content: ''; /* This is necessary for the pseudo-element to be generated */
+    position: absolute; /* Positioning context established by the relative position of .active-link */
+    bottom: -24px; /* Place at the bottom of the link */
+    left: -3px; /* Start from the left of the link */
+    width: 110%; /* Make it span the entire width of the link */
+    height: 2px; /* Adjust the thickness as needed */
+    background-color: #4287f5;/* Color of the underline */
+}
+
+.startIndex-container .active-link:after {
+    content: ''; /* This is necessary for the pseudo-element to be generated */
+    position: absolute; /* Positioning context established by the relative position of .active-link */
+    bottom: -22px; /* Place at the bottom of the link */
+    left: 10px; /* Start from the left of the link */
+    width: 80%; /* Make it span the entire width of the link */
+    height: 2px; /* Adjust the thickness as needed */
+    background-color: #4287f5;/* Color of the underline */
+}
+
+
+/* Dropdown Base Styles */
+.dropdown-menu {
+    position: absolute;
+    top: 100%; /* 위치를 조정하여 대메뉴 바로 아래에 위치하도록 설정 */
+    left: 0;
+    z-index: 1001; /* 다른 요소 위에 나타나도록 z-index 값을 높게 설정 */
+    display: block;
+    float: none;
+    min-width: 160px;
+    box-sizing: border-box;
+    padding: 10px 0;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 3px 20px;
+    clear: both;
+    box-sizing: border-box;
+    font-weight: normal;
+    line-height: 1.5;
+    color: #333;
+    white-space: nowrap;
+    text-align: left;
+    background-color: transparent;
+    border: 0;
+    text-decoration: none;
+}
+
+.dropdown-item:hover {
+    background-color: #f5f5f5;
+    color: #262626;
+}
+
+@media (max-width: 1072px) {
+    .header-container {
+        padding: 1%;
+    }
+    nav.menu-structure {
+        display: none;  /* 메뉴 숨기기 */
+    }
+}
+@media (max-width: 768px) {
+    .header-container .logo {
+        padding-left: 3vw; /* 화면 너비의 3%로 로고의 왼쪽 패딩 조절 */
+    }
+}
+/* 작은 화면 (예: 모바일) 크기에 대한 스타일 */

@@ -1,0 +1,17 @@
+{
+    "Processid": 12345,
+    "originalContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. \nProin non tortor at purus porttitor malesuada. \nVivamus quis massa sit amet arcu sollicitudin facilisis.",
+    "guideline": [
+        { "wrong_id": 1, "text": "Proir non은 틀린 문장입니다. Aenean 혹은 Deus tor 으로 작성해주세요.", "type": 1 },
+        { "wrong_id": 2, "text": "purus는 법적으로 위반한 사항은 아니지만 명시가 부족합니다. ", "type": 2 },
+        { "wrong_id": 3, "text": "Lorem ipsum에서 Lorem이 정확히 무슨 의미인지 부족합니다. 구체적으로 작성해주세요.", "type": 3 }
+    ],
+
+
+    "modifiedText": "LoremDias ipsum dolor sit amet, consectetur adipiscing elit. \nAenean non tortor at penius purus porttitor malesuada. \nVivamus quis magna sit amet arcu sollicitudin facilisis.",
+    "modifiedText_component": [
+        { "wrong_id" : 1, "convertTo": "Aenean" },
+        { "wrong_id" : 2, "convertTo": "penius purus" },
+        { "wrong_id":  3, "convertTo": "LoremDias"}
+    ]
+}

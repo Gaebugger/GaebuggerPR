@@ -1,0 +1,26 @@
+.inspection-layout {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: start;
+    flex-grow: 1;
+    position: relative;
+}
+
+.inspection-steps {
+    flex-basis: auto;
+    padding-right: 1rem;
+    background-color: #f5f5f5;
+
+}
+.inspection-steps ol {
+    list-style-type: decimal; /* Standard number type */
+    padding-left: 1.5rem; /* Padding for the numbers */
+    margin: 0; /* Remove default margin */
+}
+
+.inspection-steps li {
+    margin-bottom: 1.5rem; /* Set interval between lines */
+    font-size: 1rem; /* Adjust size if needed */
+}

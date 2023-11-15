@@ -1,0 +1,47 @@
+.compact-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 중앙 정렬 */
+    width: 100%;
+}
+
+.FileUpload-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.file-upload-section {
+    width: 100%; /* 풀로 설정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.file-upload-section .file-upload {
+    /* 여기에 필요한 스타일 추가 */
+    margin: 50px;
+    align-self: center;
+    align-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between; /* 양쪽 버튼의 간격을 최대로 설정 */
+    width: 100%; /* 필요시 조절 */
+    padding: 10px 0; /* 필요하면 상하 여백 조절 */
+}
+
+button.prev-button, 
+button.next-button {
+    margin: 10px; /* 마진은 원하는대로 조절하세요. */
+}
+.your {
+    
+}
