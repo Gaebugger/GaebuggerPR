@@ -12,5 +12,7 @@
 # FE 
 
 services/pripen/src/main/frontend
+
 npm install react-scripts --save 실행 (module다운)
+
 npm start 실행
