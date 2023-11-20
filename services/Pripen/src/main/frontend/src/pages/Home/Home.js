@@ -52,7 +52,7 @@ function Home() {
     return (
         <div className="home-container">
             <Helmet>
-                <title>프라이펜 | 파일 하나로 개인정보 처리방침 점검</title>
+                <title>프라이팬 | 파일 하나로 개인정보 처리방침 점검</title>
             </Helmet>
 
             <Header />

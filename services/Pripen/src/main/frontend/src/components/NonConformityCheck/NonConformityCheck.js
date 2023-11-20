@@ -52,8 +52,6 @@ const NonConformityCheck = ({ data, omissionData }) => {
 
   
   const getOmissionParagraph = () => {
-
-
     return (
       <div className="omissionParagraph" style={{ border: "2px solid black",display:"flex", justifyContent:"center" ,flexDirection:"column", alignContent:"center", alignItems:"center", marginBottom:"30px"}}>
         <h2 style={{fontFamily:"NotosansKR-SemiBold"}}>누락된 항목</h2>
@@ -66,54 +64,27 @@ const NonConformityCheck = ({ data, omissionData }) => {
     </div>
     );
   };
-    // 각 타입별 설명 문자열 생성
-    const getIssueDescription = (issueTypes) => {
-      // 먼저 각 타입별로 개수를 계산
-      const issueCounts = issueTypes.reduce((acc, type) => {
-        acc[type] = (acc[type] || 0) + 1;
-        return acc;
-      }, {});
 
-      // 개수가 0이 아닌 타입들만 문자열로 만든다
-      return Object.entries(issueCounts)
-        .filter(([type, count]) => count > 0)
-        .map(([type, count]) => `${type}: ${count}건`)
-        .join('\n'); // 줄바꿈 문자로 각 타입을 구분
-    };
+  const createTooltipTitle = (issueCount, issueTypes) => {
+    const issueDescriptions = Object.entries(issueTypes)
+      .filter(([type,count]) => count >0)
+      .map(([type,count]) => `${type} ${count}건`);
 
-    // 데이터 처리 과정에서 각 startIndex에 대한 issueTypes를 업데이트한다.
-    // 이 예시에서는 각 type의 개수를 저장하는 배열을 가정합니다.
-    // issueTypesByStartIndex[issue.startIndex] = ['법률 위반', '법률 위반 위험', ...];
-
-    const getUniqueIssues = (issues) => {
-      const uniqueIssues = new Set();
-      issues.forEach(issue => {
-        // 이 예제에서는 issue의 고유 식별자로 issue.id를 사용합니다.
-        // 실제 구현에서는 이슈를 고유하게 식별할 수 있는 속성을 사용해야 합니다.
-        uniqueIssues.add(issue.id);
-      });
-      return Array.from(uniqueIssues);
-    };
-
-    const createTooltipTitle = (issueCount, issueTypes) => {
-      const issueDescriptions = Object.entries(issueTypes)
-        .filter(([type,count]) => count >0)
-        .map(([type,count]) => `${type} ${count}건`);
-
-          // issueDescriptions 배열을 개행 문자(\n)로 결합
-      const descriptionText = issueDescriptions.join('\n');
-      return `위 문장은 표시된 위반 유형 외 ${issueCount-1}건의 위반 사항을 가지고 있습니다.\n\n${descriptionText}`;
-    };
+        // issueDescriptions 배열을 개행 문자(\n)로 결합
+    const descriptionText = issueDescriptions.join('\n');
+    return `위 문장은 표시된 위반 유형 외 ${issueCount-1}건의 위반 사항을 가지고 있습니다.\n\n${descriptionText}`;
+  };
 
   const getHighlightedContent = () => {
     let lastIndex = 0;
-    const contentPieces = [];
     const displayedStartIndexes = new Set();
     const issueCountsByStartIndex = {};
     const issueTypesByStartIndex = {};
 
     // 이슈 처리 및 개수 카운트
     data.issues.forEach((issue) => {
+      console.log("my lastIndex is ");
+      console.log(lastIndex);
       if (selectedViolations.includes(issue.type)) {
         if (issue.startIndex === -999) {
           return; // 이미 처리된 issue
@@ -121,7 +92,7 @@ const NonConformityCheck = ({ data, omissionData }) => {
 
   
         const issueContent = data.content.slice(issue.startIndex, issue.endIndex + 1) +
-                            (data.content[issue.endIndex] === '\n' ? '\n' : '');
+                            (data.content[issue.endIndex+1] === '\n' ? '\n' : '');
   
         if (!displayedStartIndexes.has(issue.startIndex)) {
           // 중복되지 않은 경우, 내용을 표시

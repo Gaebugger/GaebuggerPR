@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 public class DataProcessingService {
@@ -55,7 +56,7 @@ public class DataProcessingService {
     @Async
     @Transactional
     public CompletableFuture<Void> processData(UUID processId, SseEmitter emitter) throws Exception {
-        synchronized (lock) {
+        //synchronized (lock) {
             ProcessingStatus status = statusMap.get(processId);
 
             status.setProcessingStarted(true);
@@ -92,10 +93,10 @@ public class DataProcessingService {
             System.out.println("process done!!");
             status.setProcessingComplete(true);
             return CompletableFuture.completedFuture(null);
-        }
+        //}
     }
 
-    @Async
+
     @Transactional
     public CompletableFuture<Void> processData_test(UUID processId, SseEmitter emitter) throws Exception {
         synchronized (lock){
@@ -158,6 +159,14 @@ public class DataProcessingService {
                 issue.setIssue_paragraph_id(issue.getIssue_paragraph_id() + 1);
             }
         }
+        // 중복 이슈 제거
+        responseDTO.getProcess_Issues().forEach(issue -> {
+            List<String> distinctReasons = issue.getIssue_reason().stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+            issue.setIssue_reason(distinctReasons);
+        });
+
         System.out.println("response dto is!");
         System.out.println(responseDTO);
 

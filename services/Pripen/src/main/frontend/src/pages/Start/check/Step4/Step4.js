@@ -204,7 +204,7 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
             "label": "기재 항목 누락",
             "value": serverData['omissionParagraph'],
             "score": serverData['omissionParagraphScore'],
-            "color": "purple"
+            "color": "#9370db"
         }
     ];
 

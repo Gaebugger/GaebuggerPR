@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { arc } from 'd3-shape';
 import { Pie } from '@nivo/pie';
 import {  Typography } from '@mui/material';
 import './PieChartComponent.css';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import '../../assets/fonts/fonts.css';
 import './header.css';
-import logoImage from '../../assets/images/pripen_logo.png';
+import logoImage from '../../assets/images/pripen_logo.svg';
 import {useAuth} from '../../contexts/AuthContext';
 import { Button } from '@mui/material';
 import { useEffect } from 'react';
@@ -37,7 +37,7 @@ const Header = ({ active }) => {
             <div className="logo_menu">
                 <div className="logo">
                     <Link to="/">
-                        <img src={logoImage} alt="LOGO" style={{width:"130%", marginTop:"5px"}} />
+                        <img src={logoImage} alt="LOGO" style={{width:"130%", marginTop:"-10px"}} />
                     </Link>
                 </div>
             </div>

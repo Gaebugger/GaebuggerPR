@@ -263,7 +263,7 @@ const SlideByIssue = ({ original, paragraphs, issues,style,selectedButtonIssue,o
             if (spanElement && currentIssueId !== lastClickedIssueId) {
                 // 윈도우 스크롤입니다.
                 const targetSlide = (selectedButtonIssue.issue_id - 1) - omissionIssuesCount;
-                sliderRef.current.slickGoTo(targetSlide);
+                sliderRef.current.slickGoTo(targetSlide);   
     
                 var element = document.querySelector('.slick-list'); // 요소를 선택
                 var rect = element.getBoundingClientRect();

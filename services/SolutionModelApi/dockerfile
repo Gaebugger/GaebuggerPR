@@ -11,5 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 코드 복사
 COPY . .
 
-# 애플리케이션 실행
-CMD ["python", "./app.py"]
+# wsgi gunicorn 사용 + nginx / 2개의 워커, 4개의 쓰레드 => 약 8개 병렬처리
+CMD ["gunicorn", "-w", "2", "--threads", "4", "-b", "0.0.0.0:5000", "app:app"]
+
