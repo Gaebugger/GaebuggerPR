@@ -27,6 +27,8 @@ def get_table(docs):
 
 def title_create_prompt_only_with_table(docs, table_title_list):
     target= "너는 <목차>를 참고해서 <회사의 개인정보처리 방침>에서의 '대제목'을 뽑아주는 추출기야! 설명같은거 절대 하지말고 딱 리스트만 출력해줘!\n"
+    target += "반드시 [출력포맷]의 형태로 출력해줘!(파이썬 코드 작성해 달라는 거 아니야!, 군더더기말도 붙이지마!)\n"
+    target += "[출력포맷]\n['개인정보 처리목적', '개인정보 처리항목', ... ]\n"
     target += "<목차>\n" + str(table_title_list) + '\n\n'
     target += "<목차>를 기반으로 '대제목'을 <회사의 개인정보처리 방침>에서 추출해!\n"
     target += "<회사의 개인정보처리 방침>\n" + docs + '\n\n'
@@ -37,6 +39,8 @@ def title_create_prompt_only_with_table(docs, table_title_list):
 
 def title_create_prompt_part_with_table(docs, table_title_list):
     target = "너는 <목차>를 참고해서 <회사의 개인정보처리 방침의 일부분>에서의 '대제목'을 뽑아주는 추출기야! 설명같은거 절대 하지말고 딱 리스트만 출력해줘!\n"
+    target += "반드시 [출력포맷]의 형태로 출력해줘!(파이썬 코드 작성해 달라는 거 아니야!, 군더더기말도 붙이지마!)\n"
+    target += "[출력포맷]\n['개인정보 처리목적', '개인정보 처리항목', ... ]\n"
     target += "<목차>\n" + str(table_title_list) + '\n\n'
     target += "<목차>를 기반으로 '대제목'을 <회사의 개인정보처리 방침의 일부분>에서 추출해!\n"
     target += "<회사의 개인정보처리 방침의 일부분>\n" + docs + '\n\n'
@@ -50,6 +54,8 @@ def title_create_prompt_part_with_table(docs, table_title_list):
         ## 2) chunk가 여러개인 경우 chunk에서 앞에서 추출한 것을 계속 추가해서 참고
 def title_create_prompt_only(docs, rule):
     target= "너는 <규칙의 대제목>을 참고해서 <회사의 개인정보처리 방침>의 대제목을 파이썬의 리스트로 뽑아주는 추출기야. 설명같은거 절대 하지말고 딱 리스트만 출력해줘!\n"
+    target += "반드시 [출력포맷]의 형태로 출력해줘!(파이썬 코드 작성해 달라는 거 아니야!, 군더더기말도 붙이지마!)\n"
+    target += "[출력포맷]\n['개인정보 처리목적', '개인정보 처리항목', ... ]\n"
     target += "<회사의 개인정보처리 방침>\n" + docs + '\n\n'
     target += '<규칙의 대제목>\n'+ str(rule) +'\n\n'
     target += "<규칙의 대제목>을 참고해서, 이거랑 의미 비슷한 '대제목들'을 <회사의 개인정보처리 방침>에서 추출해\n"
@@ -61,6 +67,8 @@ def title_create_prompt_only(docs, rule):
 
 def title_create_prompt_part_first(docs, rule):
     target = "너는 <규칙의 대제목>을 참고해서 <회사의 개인정보처리 방침의 첫부분>의 대제목을 파이썬의 리스트로 뽑아주는 추출기야! 설명같은거 절대 하지말고 딱 리스트만 출력해줘!\n"
+    target += "반드시 [출력포맷]의 형태로 출력해줘!(파이썬 코드 작성해 달라는 거 아니야!, 군더더기말도 붙이지마!)\n"
+    target += "[출력포맷]\n['개인정보 처리목적', '개인정보 처리항목', ... ]\n"
     target += "<회사의 개인정보처리 방침의 첫부분>\n" + docs + '\n\n'
     target += '<규칙의 대제목>\n'+ str(rule) +'\n\n'
     target += "<규칙의 대제목>을 참고해서, 이거랑 의미 비슷한 '대제목들'을 <회사의 개인정보처리 방침의 첫부분>에서 추출해\n"
@@ -72,6 +80,8 @@ def title_create_prompt_part_first(docs, rule):
 
 def title_create_prompt_part(docs, rule, title_list):
     target = "너는 <규칙의 대제목>을 참고해서 <회사의 개인정보처리 방침 일부분>의 대제목을 파이썬의 리스트로 뽑아주는 추출기야! 설명같은거 절대 하지말고 딱 리스트만 출력해줘!\n"
+    target += "반드시 [출력포맷]의 형태로 출력해줘!(파이썬 코드 작성해 달라는 거 아니야!, 군더더기말도 붙이지마!)\n"
+    target += "[출력포맷]\n['개인정보 처리목적', '개인정보 처리항목', ... ]\n"
     target += "추가로 <회사의 개인정보처리 방침 일부분>은 조각난 일부분이야!\n<앞부분에서 추출한 대제목>" + "\"" + str(title_list) + '\n\n"' + "이 형식으로 대제목의 형식은 통일 되어있어! 즉 [에시0]을 참고해서 대제목을 찾으면 돼!\n"
     target += "[예시0]\n<앞부분에서 추출한 대제목>이 ['가. 개인정보처리목적', '나. 개인정보보유기간', '다. 개인정보보호책임자'] 이와같은 규칙성이 있다면, 그 형식을 참고해서 '라.'로 시작하는게 반드시 대제목이 되는 규칙이 있는거야!\n"
     target += "1> 즉 <앞부분에서 추출한 대제목>에 규칙이 있으면, 그 규칙을 보고 확실하면 추출해줘! 굳이 억지로 추출할 필요는 없어!\n"
