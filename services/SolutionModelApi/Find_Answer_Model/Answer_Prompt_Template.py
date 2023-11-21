@@ -19,7 +19,7 @@ from langchain.prompts.chat import (
 from langchain.llms import OpenAI
 
 # chat = ChatOpenAI(model_name='gpt-4',temperature=0)
-llm = OpenAI(temperature=0.54, model_name='gpt-4')
+llm = OpenAI(temperature=0.55, model_name='gpt-4')
 
 # 최종 Answer주는 프롬프트의 템플릿
 def Answer_Template(policy, instruction):
