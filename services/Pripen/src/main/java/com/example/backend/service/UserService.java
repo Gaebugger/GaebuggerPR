@@ -11,11 +11,13 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder; // 비밀번호 암호화를 위한 PasswordEncoder
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+        this.userRepository = userRepository;
+        this.passwordEncoder= passwordEncoder;
+    }
 
     public Optional<User> authenticate(String email, String password) {
         Optional<User> foundUser = userRepository.findByEmail(email);
@@ -36,6 +38,5 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // 회원 가입, 사용자 정보 수정, 사용자 삭제 등의 기능을 이곳에 추가할 수 있습니다.
 
 }

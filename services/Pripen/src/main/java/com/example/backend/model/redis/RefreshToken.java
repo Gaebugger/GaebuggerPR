@@ -16,7 +16,7 @@ import java.time.Instant;
 public class RefreshToken implements Serializable {
 
     @Id
-    private String email; // 보통은 사용자의 식별자나 이메일 등이 될 수 있습니다.
+    private String email; //사용자의 식별자나 이메일 등
 
     private String token;
     private Instant expirationDate;

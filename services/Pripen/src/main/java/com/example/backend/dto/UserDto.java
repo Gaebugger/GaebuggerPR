@@ -14,7 +14,7 @@ import lombok.ToString;
 public class UserDto {
 
     private String email;
-    private String password;  // 이후에 DB에 저장될 때 password_hash로 매핑됩니다.
+    private String password;  // 이후에 DB에 저장될 때 password_hash로 매핑
     private String name;      // 만약 사용자 이름도 받는다면
     private Long companyId;   // 회사 ID도 받는다면
 }

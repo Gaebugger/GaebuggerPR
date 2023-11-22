@@ -68,7 +68,7 @@ public class DataProcessingService {
                         "user_input", status.getCheckedItems(),
                         "text", status.getProcessedFileContent()
                 );
-                // ApiResponseDTO 형태로 응답을 받습니다.
+                // ApiResponseDTO 형태로 응답
                 ApiResponseDTO responseDTO = webClient.post()
                         .uri("/process-text")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -136,10 +136,10 @@ public class DataProcessingService {
 
         int omissionParagraphScore = responseDTO.getProcess_Issues().stream()
                 .filter(issue -> "기재 항목 누락".equals(issue.getIssue_type()))
-                .mapToInt(issue -> issue.getIssue_score()) // 람다 표현식 사용
+                .mapToInt(issue -> issue.getIssue_score())
                 .sum();
 
-        // process_Score를 계산하여 업데이트합니다.
+        // process_Score를 계산하여 업데이트
         int score = 100 - ((responseDTO.getProcess_Law_Violate() * 15)
                 + (responseDTO.getProcess_Law_Danger() * 7)
                 + (responseDTO.getProcess_Guide_Violate() * 3)
@@ -170,7 +170,7 @@ public class DataProcessingService {
         System.out.println("response dto is!");
         System.out.println(responseDTO);
 
-        // responseDTO를 JSON 형태로 변환하여 SSE로 보냅니다.
+        // responseDTO를 JSON 형태로 변환하여 SSE로 전송
         String responseJson = objectMapper.writeValueAsString(responseDTO);
         emitter.send(SseEmitter.event().name("data").data(responseJson));
     }

@@ -22,14 +22,6 @@ public class ProcessingStatus {
         this.uuid = uuid;
     }
 
-    public boolean isProcessingComplete() {
-        return isProcessingComplete;
-    }
-
-    public boolean hasProcessingStarted() {
-        return processingStarted;
-    }
-
     public void setProcessingStarted(boolean processingStarted) {
         this.processingStarted = processingStarted;
     }

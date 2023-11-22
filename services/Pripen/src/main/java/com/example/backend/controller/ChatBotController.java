@@ -21,7 +21,7 @@ public class ChatBotController {
     public Mono<ResponseEntity<String>> requestChatBot() {
         return this.webClient
                 .get()
-                .retrieve() // 응답을 검색합니다.
-                .toEntity(String.class); // ResponseEntity로 변환합니다.
+                .retrieve() // 응답을 검색
+                .toEntity(String.class); // ResponseEntity로 변환
     }
 }

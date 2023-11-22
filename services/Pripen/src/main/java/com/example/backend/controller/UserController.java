@@ -178,11 +178,11 @@ public class UserController {
             Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findByToken(refreshToken);
             refreshTokenOptional.ifPresent(refreshTokenRepository::delete);
 
-            // 쿠키를 만료시키기 위한 'Set-Cookie' 헤더를 추가합니다.
+            // 쿠키를 만료시키기 위한 'Set-Cookie' 헤더를 추가
             Cookie cookie = new Cookie("refreshToken", null); // refreshToken 쿠키를 null로 설정
             cookie.setPath("/");
             cookie.setHttpOnly(true);
-            cookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료되게 합니다.
+            cookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
             response.addCookie(cookie);
         });
         System.out.println("delete your token from redis");
