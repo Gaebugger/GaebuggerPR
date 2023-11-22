@@ -77,7 +77,14 @@ def Make_Issues(ans, issue_paragraph_id, text, df, original_index, issue_id_star
         i=i.replace("\n","\r\n")
         if i.startswith('"') and i.endswith('"'):
             i = i[1:-1]  # 앞뒤 따옴표 그냥 제거 추후 수정 -> 프롬프트에서 계속 위반문장에 따옴표를 붙임
-        startIndex = text.find(i)
+
+        if("\r\n" in i):
+            new_str = i.split("\r\n")
+            start = new_str[0]
+            startIndex = text.find(start)
+        else:
+            startIndex = text.find(i)
+
         endIndex = len(i) + startIndex - 1 # -1 하는 이유는 리스트 인덱스 구조가 다름 (Python -> JAVA)
         issue_startIndex.append(startIndex)
         issue_endIndex.append(endIndex)
