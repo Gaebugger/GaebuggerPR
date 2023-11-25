@@ -6,8 +6,7 @@ import com.example.backend.dto.UserDto;
 import com.example.backend.model.User;
 import com.example.backend.model.redis.RefreshToken;
 import com.example.backend.repository.redis.RefreshTokenRepository;
-import com.example.backend.service.RefreshTokenService;
-import com.example.backend.service.UserService;
+import com.example.backend.service.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +21,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.example.backend.service.JWTService;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,7 +38,8 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
     private final RefreshTokenRepository refreshTokenRepository;
-
+    private final EmailPostService emailPostService;
+    private final EmailVerificationService emailVerificationService;
     public UserController(
             UserService userService,
             PasswordEncoder passwordEncoder,
@@ -48,7 +47,9 @@ public class UserController {
             JWTService jwtService,
             AuthenticationManager authenticationManager,
             RefreshTokenService refreshTokenService,
-            RefreshTokenRepository refreshTokenRepository) {
+            RefreshTokenRepository refreshTokenRepository,
+            EmailPostService emailPostService,
+            EmailVerificationService emailVerificationService) {
 
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -57,6 +58,8 @@ public class UserController {
         this.authenticationManager = authenticationManager;
         this.refreshTokenService = refreshTokenService;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.emailPostService = emailPostService;
+        this.emailVerificationService = emailVerificationService;
     }
 
     @CrossOrigin(origins = {"https://www.pri-pen.com"},allowCredentials = "true")
@@ -187,5 +190,47 @@ public class UserController {
         });
         System.out.println("delete your token from redis");
         return ResponseEntity.ok().build(); // 성공적인 응답
+    }
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"} )
+    @GetMapping("/check-email")
+    public ResponseEntity<?> checkEmail(@RequestParam String email){
+        boolean isAvailable = !userService.existsByEmail(email);
+
+        return ResponseEntity.ok().body(Map.of("isAvailable", isAvailable));
+    }
+
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com","http://localhost:3000"})
+    @PostMapping("/email-post")
+    public ResponseEntity<?> emailPost(@RequestBody Map<String, String> requestData){
+        String email = requestData.get("email");
+        try {
+            String verificationCode = emailPostService.generateVerificationCode();
+            System.out.println("verfication code is! " + verificationCode);
+            emailPostService.doSendEmail(email,verificationCode);
+            return ResponseEntity.ok().body("이메일 전송 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 전송 실패");
+        }
+        //파라미터 입력받은 email에 템플릿 인증코드 전송.
+    }
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"})
+    @PostMapping("/email-validity")
+    public ResponseEntity<?> emailValidity(@RequestBody Map<String, String> requestBody){
+        String code = requestBody.get("code");  // 여기 고쳐야함. 
+        String email = requestBody.get("email");
+        System.out.println("your code is " + code);
+        if (email == null || email.trim().isEmpty() || code == null || code.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("이메일 or code 없음");
+        }
+
+        boolean isValid = emailVerificationService.verifyEmailWithCode(email, code);
+        if (!isValid) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("코드 만료 or 잘못된 코드");
+        }
+
+        return ResponseEntity.ok().body("인증 성공");
     }
 }

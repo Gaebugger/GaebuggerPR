@@ -12,6 +12,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import LoadingPage from './components/LoadingPage/LoadingPage';
 import Signup from './pages/account/Signup/Signup';
 import ChatBotBubbleButton from './components/chatbot/ChatBotBubbleButton';
+import SignupMain from './pages/account/Signup/SignupMain';
 
 function App() {
 
@@ -27,7 +28,7 @@ function App() {
                   <Route path="/start/*" element={<StartIndex />} />
                   <Route path="/guidelines" element={<Guidelines />} />
                   <Route path="/login" element={<LoginLayout />} />
-                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/signup" element={<SignupMain />} />
               </Routes>
               <ChatBotBubbleButton /> {/* ChatBotBubbleButton 렌더링 */}
           </div>

@@ -54,7 +54,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers
-                        .frameOptions().disable() // frameOptions 비활성화
+                        .frameOptions().disable() // frameOptions 비활성화 -> 람다식 어떻게??
                 )
                 .sessionManagement((sessionManagement)->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
