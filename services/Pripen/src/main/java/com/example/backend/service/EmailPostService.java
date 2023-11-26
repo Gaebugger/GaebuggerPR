@@ -43,7 +43,7 @@ public class EmailPostService {
         try {
             sendVerificationEmail(email, verificationCode);
         } catch (MessagingException e) {
-            e.printStackTrace(); // 콘솔에 예외의 스택 트레이스를 출력합니다.
+            e.printStackTrace(); // 콘솔에 예외의 스택 트레이스를 출력
         } catch (Exception e) {
             e.printStackTrace(); // 다른 일반 예외에 대한 처리
         }

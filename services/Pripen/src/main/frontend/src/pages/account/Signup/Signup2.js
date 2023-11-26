@@ -19,8 +19,10 @@ const Signup2 = ({userData, nextStep}) => {
     };
 
     // 인증 코드 확인 함수
-    const verifyCode = async () => {
+    const verifyCode = async (code) => {
         try {
+
+            console.log("your code is "  + code);
             // 인증 코드 확인 API 호출
             const response = await axios.post('https://backapi.pri-pen.com/userAuthentication/email-validity', { email, code });
             if(response.data.isValid){
@@ -31,7 +33,12 @@ const Signup2 = ({userData, nextStep}) => {
                 setCodeError('유효하지 않은 코드 입니다. 다시 입력해주세요.');
             }
         } catch (error) {
-            setCodeError('통신 실패');
+            if (error.response) {
+                // 백엔드에서 보낸 오류 메시지를 그대로 사용
+                setCodeError(error.response.data);
+            } else {
+                setCodeError('통신 실패. 다시 시도해주세요.');
+            }
         }
     };
 
@@ -44,7 +51,7 @@ const Signup2 = ({userData, nextStep}) => {
     return(
         
         <div className="Signup2">
-            <SignupForm2 verifyCode={verifyCode} code={code} codeError={codeError} />
+            <SignupForm2 verifyCode={verifyCode} codeError={codeError} code={code} setCode={setCode}/>
         </div>
     );
 };

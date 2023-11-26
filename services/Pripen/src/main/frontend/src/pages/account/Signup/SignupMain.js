@@ -1,6 +1,8 @@
 import React,{useState} from "react";
 import Signup from "./Signup";
 import Signup2 from "./Signup2";
+import Signup3 from "./Signup3";
+
 
 
 const SignupMain = () =>{
@@ -15,6 +17,7 @@ const SignupMain = () =>{
     const nextStep = () => {
         setStep(step + 1);
         console.log("my userData is:");
+        console.log("your step is " , step);
         console.log(userData);
     };
 
@@ -29,7 +32,9 @@ const SignupMain = () =>{
             return <Signup nextStep={nextStep} handleChange={handleChange} />;
         case 2:
             return <Signup2 nextStep={nextStep} userData={userData} />;
-
+        case 3:
+            return <Signup3 nextStep={nextStep} handleChange={handleChange} userData={userData}/>;
+        case 4:  // redirect login
         default:
             return <div>Unknown step</div>;
     }

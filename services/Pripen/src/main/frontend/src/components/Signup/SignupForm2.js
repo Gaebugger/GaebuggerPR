@@ -1,13 +1,14 @@
 import React,{useState,useEffect} from "react";
 import { Box,TextField,Button, Typography } from "@mui/material";
 
-const SignupForm2 = ({nextStep, verifyCode, codeError}) =>{
-    const [code, setCode] = useState('');
+const SignupForm2 = ({nextStep, verifyCode, codeError, code, setCode}) =>{
 
     const handleCodeChange = (e) => {
         // 입력된 값을 대문자로 변환하고, 영문자와 숫자만 허용
         const uppercaseCode = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
         setCode(uppercaseCode);
+        console.log("Updated code:", uppercaseCode); // 상태 업데이트 확인
+        console.log("Updated real Code:  ", code);
     };
 
     const handleSubmit = () => {

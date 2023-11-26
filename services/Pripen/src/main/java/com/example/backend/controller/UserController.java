@@ -3,6 +3,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.ResponseMessage;
 import com.example.backend.dto.UserDto;
+import com.example.backend.model.Company;
 import com.example.backend.model.User;
 import com.example.backend.model.redis.RefreshToken;
 import com.example.backend.repository.redis.RefreshTokenRepository;
@@ -22,10 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/userAuthentication")
@@ -40,6 +38,7 @@ public class UserController {
     private final RefreshTokenRepository refreshTokenRepository;
     private final EmailPostService emailPostService;
     private final EmailVerificationService emailVerificationService;
+    private final CompanyService companyService;
     public UserController(
             UserService userService,
             PasswordEncoder passwordEncoder,
@@ -49,7 +48,8 @@ public class UserController {
             RefreshTokenService refreshTokenService,
             RefreshTokenRepository refreshTokenRepository,
             EmailPostService emailPostService,
-            EmailVerificationService emailVerificationService) {
+            EmailVerificationService emailVerificationService,
+            CompanyService companyService) {
 
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -60,6 +60,7 @@ public class UserController {
         this.refreshTokenRepository = refreshTokenRepository;
         this.emailPostService = emailPostService;
         this.emailVerificationService = emailVerificationService;
+        this.companyService = companyService;
     }
 
     @CrossOrigin(origins = {"https://www.pri-pen.com"},allowCredentials = "true")
@@ -219,18 +220,39 @@ public class UserController {
     @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"})
     @PostMapping("/email-validity")
     public ResponseEntity<?> emailValidity(@RequestBody Map<String, String> requestBody){
-        String code = requestBody.get("code");  // 여기 고쳐야함. 
-        String email = requestBody.get("email");
-        System.out.println("your code is " + code);
-        if (email == null || email.trim().isEmpty() || code == null || code.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("이메일 or code 없음");
-        }
+        try {
+            String code = requestBody.get("code");  // 여기 고쳐야함.
+            String email = requestBody.get("email");
+            System.out.println("your code is " + code);
+            System.out.println("your email is " + email);
 
-        boolean isValid = emailVerificationService.verifyEmailWithCode(email, code);
-        if (!isValid) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("코드 만료 or 잘못된 코드");
-        }
+            if (email == null || email.trim().isEmpty() || code == null || code.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("이메일 or code 없음");
+            }
 
-        return ResponseEntity.ok().body("인증 성공");
+            boolean isValid = emailVerificationService.verifyEmailWithCode(email, code);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("isValid", isValid);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 내부 서버 오류 처리
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
+        }
+    }
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com", "http://localhost:3000"})
+    @GetMapping("/company-search")
+    public ResponseEntity<List<Company>> companyList(@RequestParam String query) {
+        try {
+
+            System.out.println("input is : " + query);
+            List<Company> companies = companyService.searchCompanies(query);
+            return ResponseEntity.ok(companies);
+        } catch (Exception e) {
+            // 적절한 예외 처리 로직 구현
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
