@@ -116,14 +116,6 @@ const SignupForm = ({nextStep, handleChange}) => {
                 회원가입
             </Typography>
             <TextField
-                label="테스트"
-                variant="outlined"
-                size="small"
-                fullWidth
-                onChange={handleChange('name')}
-                sx={{ marginBottom: '5px', fontFamily:"NotoSansKR-Bold"  }}
-            />
-            <TextField
                 label="사용자 이름"
                 variant="outlined"
                 size="small"

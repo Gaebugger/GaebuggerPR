@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 
+import com.example.backend.dto.CompanyDTO;
 import com.example.backend.dto.ResponseMessage;
 import com.example.backend.dto.UserDto;
 import com.example.backend.model.Company;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -32,9 +34,12 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final AuthenticationService authenticationService;
     private final JWTService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
+    private final CookieService cookieService;
+    private final AuthenticationManager authenticationManager;
+
     private final RefreshTokenRepository refreshTokenRepository;
     private final EmailPostService emailPostService;
     private final EmailVerificationService emailVerificationService;
@@ -43,8 +48,10 @@ public class UserController {
             UserService userService,
             PasswordEncoder passwordEncoder,
             ModelMapper modelMapper,
+            AuthenticationService authenticationService,
             JWTService jwtService,
             AuthenticationManager authenticationManager,
+            CookieService cookieService,
             RefreshTokenService refreshTokenService,
             RefreshTokenRepository refreshTokenRepository,
             EmailPostService emailPostService,
@@ -54,7 +61,9 @@ public class UserController {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
+        this.authenticationService = authenticationService;
         this.jwtService = jwtService;
+        this.cookieService = cookieService;
         this.authenticationManager = authenticationManager;
         this.refreshTokenService = refreshTokenService;
         this.refreshTokenRepository = refreshTokenRepository;
@@ -68,45 +77,25 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody User loginUser, HttpServletResponse response) {
         try {
-            // Spring Security 인증 과정 실행
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPasswordHash())
-            );
-            System.out.println("my login info is:");
-            System.out.println(loginUser);
-            // 인증된 사용자 세션에 저장
+            Authentication authentication = authenticationService.authenticateUser(loginUser);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // JWT 토큰 생성
             String accessToken = jwtService.generateJWT(loginUser.getEmail());
-            // refresh token 객체 생성
             RefreshToken refreshTokenObject = refreshTokenService.createRefreshToken(loginUser.getEmail());
-            // Refresh Token을 Redis에 저장하는 로직 추가
-            refreshTokenService.saveRefreshToken(refreshTokenObject);
 
-            // Access Token 쿠키 설정
-            Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-            accessTokenCookie.setHttpOnly(true);
-            accessTokenCookie.setSecure(true); // HTTPS를 사용하는 경우에만 true로 설정
-            accessTokenCookie.setPath("/"); // 쿠키를 전송할 요청 경로
-            accessTokenCookie.setMaxAge((int) jwtService.getAccessTokenValidityInSeconds()); // 쿠키 만료 시간을 설정
-            response.addCookie(accessTokenCookie);
+            cookieService.addCookie(response, "accessToken", accessToken, (int) jwtService.getAccessTokenValidityInSeconds());
+            cookieService.addCookie(response, "refreshToken", refreshTokenObject.getToken(), (int) refreshTokenService.getRefreshTokenValidityInSeconds());
 
-            // Refresh Token 쿠키 설정
-            Cookie refreshTokenCookie = new Cookie("refreshToken", refreshTokenObject.getToken());
-            refreshTokenCookie.setHttpOnly(true);
-            refreshTokenCookie.setSecure(true); // HTTPS를 사용하는 경우에만 true로 설정
-            refreshTokenCookie.setPath("/");
-            refreshTokenCookie.setMaxAge((int) refreshTokenService.getRefreshTokenValidityInSeconds()); // 쿠키 만료 시간을 설정
-            response.addCookie(refreshTokenCookie);
-
-            // 응답 바디 설정
-            Map<String, String> responseBody = new HashMap<>();
-            responseBody.put("status", "success");
-
-            return ResponseEntity.ok(responseBody); // JWT 응답으로 전송
+            return ResponseEntity.ok(Collections.singletonMap("status", "success"));
+        } catch (BadCredentialsException e) {
+            // BadCredentialsException에 대한 구체적인 처리
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Invalid credentials");
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Authentication failed");
+            // 기타 AuthenticationException에 대한 처리
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Authentication failed");
+        } catch (RuntimeException e) {
+            // 타임아웃 등의 런타임 예외 처리
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
     }
 
@@ -163,8 +152,6 @@ public class UserController {
         System.out.println(user.getPasswordHash());
         System.out.println("user's info is:");
         System.out.println(user);
-        // CompanyId를 1로 고정
-        user.setCompanyId(1L);
 
         userService.save(user);
 
@@ -254,5 +241,19 @@ public class UserController {
             // 적절한 예외 처리 로직 구현
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"})
+    @PostMapping("/company-create")
+    public ResponseEntity<?> companyCreate(@RequestBody CompanyDTO companyDTO){
+        Company newCompany = new Company();
+        newCompany.setCompanyName(companyDTO.getCompanyName());
+        newCompany.setCompanyAddress(companyDTO.getCompanyAddress());
+        newCompany.setCompanyPostCode(companyDTO.getCompanyPostCode());
+        newCompany.setCompanyExtraAddress(companyDTO.getCompanyExtraAddress());
+        newCompany.setCompanyBusinessRegistration(companyDTO.getCompanyBusinessRegistration());
+
+        Company createdCompany = companyService.createCompany(newCompany);
+        return ResponseEntity.ok(createdCompany);
     }
 }

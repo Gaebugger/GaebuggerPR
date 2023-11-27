@@ -24,7 +24,6 @@ public class EmailVerificationCodeRepositoryImpl implements EmailVerificationCod
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(verificationCode, email, 5, TimeUnit.MINUTES); // 5분 후 만료
     }
-
     @Override
     public Optional<String> getEmailByVerificationCode(String verificationCode) {
         ValueOperations<String, String> ops = this.redisTemplate.opsForValue();
