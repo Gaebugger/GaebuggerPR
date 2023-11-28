@@ -105,8 +105,8 @@ const Header = ({ active }) => {
             {/* 로그인 상태에 따른 UI 변경 */}
             {isLoggedIn? (
                 <div className="authentication">
-                    <Link to="/mypage">마이 페이지</Link>
-                    <button onClick={handleLogout}>로그아웃</button>
+                    <Link to="/mypage" style={{marginRight:'40px'}}>마이 페이지</Link>
+                    <Link to="/" onClick={handleLogout}>로그아웃</Link>
                 </div>
             ) : (
                 <div className="authentication">

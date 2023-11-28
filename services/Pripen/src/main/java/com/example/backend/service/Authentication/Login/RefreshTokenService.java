@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.Authentication.Login;
 
 import com.example.backend.exception.TokenNotFoundException;
 import com.example.backend.model.redis.RefreshToken;

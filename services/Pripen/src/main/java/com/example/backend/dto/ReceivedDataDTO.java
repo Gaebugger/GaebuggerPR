@@ -13,7 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ReceivedData {
+
+public class ReceivedDataDTO {
     private List<Integer> checkedItems;
     private DataObject infoData;
     @Getter

@@ -21,5 +21,4 @@ public class RefreshToken implements Serializable {
     private String token;
     private Instant expirationDate;
 
-    // 기본 생성자, 전체 인자를 받는 생성자, Getter와 Setter 등 필요한 메소드들...
 }

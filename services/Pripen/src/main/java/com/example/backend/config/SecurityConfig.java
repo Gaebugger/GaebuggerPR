@@ -1,7 +1,6 @@
 package com.example.backend.config;
 
-import com.example.backend.service.JWTService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.backend.service.Authentication.Login.JWTService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import com.example.backend.service.UserDetailServiceImpl;
+import com.example.backend.service.Authentication.Login.UserDetailServiceImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration

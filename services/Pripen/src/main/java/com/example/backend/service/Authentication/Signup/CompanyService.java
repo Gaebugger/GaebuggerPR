@@ -1,6 +1,6 @@
-package com.example.backend.service;
+package com.example.backend.service.Authentication.Signup;
 
-import com.example.backend.model.Company;
+import com.example.backend.model.Authentication.Company;
 import com.example.backend.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.example.backend.config;
 
 import com.example.backend.dto.UserDto;
-import com.example.backend.model.User;
+import com.example.backend.model.Authentication.User;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;

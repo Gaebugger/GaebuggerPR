@@ -1,20 +1,16 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.ReceivedData;
-import com.example.backend.model.ProcessingStatus;
-import com.example.backend.service.DataProcessingService;
+import com.example.backend.dto.ReceivedDataDTO;
+import com.example.backend.service.Analysis.DataProcessingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.backend.service.DataProcessingService;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,13 +35,11 @@ public class ReceiveDataController {
 
         // 문자열 형태의 JSON을 ReceivedData 객체로 변환
         ObjectMapper objectMapper = new ObjectMapper();
-        ReceivedData receivedData = objectMapper.readValue(receivedDataString, ReceivedData.class);
+        ReceivedDataDTO receivedData = objectMapper.readValue(receivedDataString, ReceivedDataDTO.class);
 
         List<Integer> checkedItems = receivedData.getCheckedItems();
-        ReceivedData.DataObject dataObject = receivedData.getInfoData();
         MultipartFile userFile = file;
-//
-//
+
         // processID를 응답으로 보냄
         UUID processID = dataProcessingService.initializeProcessingStatus(checkedItems, userFile);
         System.out.println("processID is :" + processID);

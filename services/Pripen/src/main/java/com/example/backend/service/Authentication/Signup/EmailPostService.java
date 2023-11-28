@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.Authentication.Signup;
 
 import com.example.backend.repository.redis.EmailVerificationCodeRepository;
 import jakarta.mail.MessagingException;

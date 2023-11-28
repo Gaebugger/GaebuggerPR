@@ -18,7 +18,6 @@ public class ApiResponseDTO {
     private int process_Score;
     private List<Paragraph> process_Paragraph;
     private List<Issue> process_Issues;
-    private String process_Modified;
 
     @Data
     @AllArgsConstructor

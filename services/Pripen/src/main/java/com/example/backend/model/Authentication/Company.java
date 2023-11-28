@@ -1,13 +1,12 @@
-package com.example.backend.model;
+package com.example.backend.model.Authentication;
 
 
 import jakarta.persistence.*;
 import lombok.*;
 
+@Data
 @Entity
 @Table(name = "Company")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString

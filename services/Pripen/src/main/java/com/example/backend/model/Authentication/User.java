@@ -1,14 +1,14 @@
-package com.example.backend.model;
+package com.example.backend.model.Authentication;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
 
+
+@Data
 @Entity
 @Table(name = "User")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

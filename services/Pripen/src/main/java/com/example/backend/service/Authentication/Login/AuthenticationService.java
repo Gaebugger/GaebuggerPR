@@ -1,7 +1,7 @@
-package com.example.backend.service;
+package com.example.backend.service.Authentication.Login;
 
 
-import com.example.backend.model.User;
+import com.example.backend.model.Authentication.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
