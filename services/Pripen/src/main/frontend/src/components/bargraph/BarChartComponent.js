@@ -2,12 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { RadioGroup, FormControlLabel, Radio, FormControl, Typography } from '@mui/material';
 import '../../assets/fonts/fonts.css';
-const BarChartComponent = ({ data }) => {
+const BarChartComponent = ({ captureCanvas, data }) => {
     const [isVisible, setIsVisible] = useState(false); // 기본적으로는 보이지 않게 설정
     const chartRef = useRef(null);
     const [selectedValue, setSelectedValue] = useState('allType');
     const [currentKeys, setCurrentKeys] = useState(['사용자', '전체평균']);
-
     const handleRadioChange = (event) => {
         const value = event.target.value;
         if (value === "allType") {
@@ -35,6 +34,9 @@ const BarChartComponent = ({ data }) => {
                 if (entry.isIntersecting) {
                     setTimeout(() => {
                         setIsVisible(true);
+                        setTimeout(() => {
+                            captureCanvas('section3', 4); // 추가적인 1.5초 후에 captureCanvas 호출
+                        }, 1500);
                     }, 500);  // 1.5초 기다린 후 에니메이션 시작
                     if (chartRef.current) {
                         observer.unobserve(chartRef.current);
@@ -58,7 +60,7 @@ const BarChartComponent = ({ data }) => {
     const userType=data.IndustryType;
     
     return (
-        <div ref={chartRef} style={{ height: '400px' ,border:'3px solid #f0f0f0', marginLeft:"20px", marginRight:"20px",borderRadius:"10px"}}>
+        <div id="section3" ref={chartRef} style={{ height: '400px' ,border:'3px solid #f0f0f0', marginLeft:"20px", marginRight:"20px",borderRadius:"10px"}}>
 
             {/* 라디오 버튼 추가 */}
             <FormControl component="fieldset" style={{ display: 'flex' }}>

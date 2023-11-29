@@ -5,23 +5,16 @@ import PieChartComponent from '../../../../components/piechart/PieChartComponent
 import ResultBoxSection from '../../../../components/ResultBox/ResultBoxSection';
 import ScoreDisplay from '../../../../components/scoredisplay/ScoreDisplay';
 import NonConformityCheck from '../../../../components/NonConformityCheck/NonConformityCheck';
-import testData from './fromback.json';
 import '../compactContainer.css';
 import './Step4.css';
 import '../../../../assets/fonts/fonts.css';    
 import CustomizedSteppers from '../../../../components/StepIndicator/StepIndicator';
-import axios from "axios";
-import { Subtitles } from '@mui/icons-material';
 import { StyledPaper } from '../Guideline_detail/styles/ComponentStyles';
-import LiveHelpIcon from '@mui/icons-material/LiveHelp';
-import Tooltip from '@mui/material/Tooltip';
-import IssuePopover from '../../../../components/IssuePopover/IssuePopover';
-
+import { useCanvas } from "../../CanvasProvider";
+import ResultScore from '../../../../components/resultscore/ResultScore';
 function Step4({ processId, nextStep,responseData,infoObject }) {
-    const [open, setOpen] = useState(false);
-    const [detailType, setDetailType] = useState("");
-    const [visible, setVisible] = useState(false);
-    const containerRef = useRef(null);
+    const containerRef = useRef(null); // 컨테이너 참조
+    const { captureCanvas } = useCanvas();
 
     // 임의의 테스트 데이터
     const mockServerData = {
@@ -207,12 +200,37 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
             "color": "#9370db"
         }
     ];
-
-
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //       // 전체 문서의 높이
+    //       const docHeight = document.documentElement.scrollHeight;
+    //       // 현재 스크롤된 높이
+    //       const scrollTop = document.documentElement.scrollTop;
+    //       // 브라우저 창의 높이
+    //       const clientHeight = document.documentElement.clientHeight;
+    //       // 스크롤된 비율 계산
+    //       const scrollPercent = (scrollTop / (docHeight - clientHeight)) * 100;
+      
+    //       // 스크롤이 60% 이상이면 동작 실행
+    //       if (scrollPercent >= 60) {
+    //         captureCanvas('section1', 4);
+    //         captureCanvas('section2', 4);
+    //         captureCanvas('section3', 4);
+    //       }
+    //     };
+      
+    //     // 이벤트 리스너 등록
+    //     window.addEventListener('scroll', handleScroll);
+      
+    //     // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    //     return () => {
+    //       window.removeEventListener('scroll', handleScroll);
+    //     };
+    //   }, [captureCanvas]);
     const total = pieData.reduce((acc, data) => acc + data.value, 0);
 
     return (
-        <Container className="compact-container" style={{padding:"0px"}}>
+        <Container className="compact-container" ref={containerRef} style={{padding:"0px"}}>
             <CustomizedSteppers activeStep={3} />
             {/* 다양한 항목들 */}
             <div className="results" style={{margin:"20px"}}>
@@ -220,7 +238,7 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
                     <h1 style={{marginLeft:'20px', fontFamily: "NotoSansKR-SemiBold"}}>대시보드</h1>
                     <Divider style={{marginBottom:'30px'}} />
                     <StyledPaper>
-                        <ResultBoxSection serverData={serverData} />
+                        <ResultBoxSection serverData={serverData} captureCanvas={captureCanvas}/>
                         <Divider style={{margin: "50px", opacity:0}} />
                         <h2 style={{marginLeft:'20px', fontFamily: "NotoSansKR-Medium"}}>점수</h2>
                         <Divider style={{marginBottom:'10px'}} />
@@ -228,8 +246,7 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
                             <span style={{ fontWeight: "bold", fontSize: "1.2em",color:"black" }}>{serverData['industryType']}</span>님의 개인정보 처리방침 진단 결과를 토대로 계산한 점수입니다.
                         </h3>
                         <div className="score-whyscore" style={{borderRadius: '10px',backgroundColor: "#ffffff", border: '3px solid #F2F2F2',marginTop:"40px", marginLeft:"20px",marginRight:"20px"}}>
-                            <ScoreDisplay data={serverData} />
-                            <PieChartComponent pieData={pieData} total={total} />   
+                            <ResultScore captureCanvas={captureCanvas} data={serverData} pieData={pieData} total={total} />  
                         </div>
                     </StyledPaper>
                     <Divider style={{marginBottom:"20px",opacity:0}} />
@@ -242,7 +259,7 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
                             <span style={{ fontWeight: "bold", fontSize: "1.2em",color:"black" }}>{serverData['industryType']}</span>님의 결과와 업종 평균 값과 비교해 보세요
                     </h3>
                     <Divider style={{marginBottom:'20px',opacity:0}} />
-                    <BarChartComponent data={graphData} />
+                    <BarChartComponent captureCanvas={captureCanvas} data={graphData} />
                 </div>
                 <Divider style={{margin: "100px", opacity:0}} />
 
@@ -259,7 +276,7 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
                             <IssuePopover />
                         </div> */}
                     </div>
-                    <NonConformityCheck data={extractedData} omissionData={omissionParagraphIssues} />
+                    <NonConformityCheck captureCanvas={captureCanvas} data={extractedData} omissionData={omissionParagraphIssues} />
                 </div>
                 <Divider style={{margin: "100px", opacity:0}} />
 

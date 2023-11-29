@@ -1,4 +1,4 @@
-import React, { useState,useMemo} from "react";
+import React, { useState,useMemo, useEffect} from "react";
 import CustomizedSteppers from "../../../../components/StepIndicator/StepIndicator";
 import {    Select, MenuItem, InputLabel, FormControl, Typography,  Box, Divider, Container, Button, IconButton,Table, TableBody, TableCell, TableHead, TableRow,TablePagination  } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -12,8 +12,10 @@ import '../../../../assets/fonts/fonts.css';
 import { 
     StyledPaper, 
 } from './styles/ComponentStyles';
+import { useCanvas } from "../../CanvasProvider";
 function Guideline_detail({processId, prevStep,responseData}){
     // 임의의 데이터    
+    const { captureCanvas, downloadAllImages } = useCanvas();
     const [selectedIssueList, setSelectedIssueList] = useState(null);
     const [selectedIssue, setSelectedIssue] = useState(null);
     const [selectedButtonIssue, setSelectedButtonIssue] = useState(null);
@@ -59,7 +61,6 @@ function Guideline_detail({processId, prevStep,responseData}){
         }, 100);
 
     };
-
     return (
         <Container className="compact-container" style={{padding:"0px"}}>
             <CustomizedSteppers activeStep={3} />
@@ -76,7 +77,7 @@ function Guideline_detail({processId, prevStep,responseData}){
                         <Divider style={{marginBottom:'10px'}} />
                         <h3 style={{marginLeft:"25px", fontFamily:"NotoSansKR-Medium", color:"#999"}}>테이블을 통해 진단 결과를 간편하게 확인해보세요</h3>
                         <Divider style={{marginBottom:'20px',opacity:0}} />
-                        <TablePage selectedIssueType={selectedIssueType} setSelectedIssueType={setSelectedIssueType} filteredIssues={filteredIssues} handleButtonClick={handleButtonClick}/>
+                        <TablePage captureCanvas={captureCanvas} selectedIssueType={selectedIssueType} setSelectedIssueType={setSelectedIssueType} filteredIssues={filteredIssues} handleButtonClick={handleButtonClick}/>
                     </div>
 
                     <Divider style={{marginBottom:"50px", opacity:0}} />
@@ -132,7 +133,9 @@ function Guideline_detail({processId, prevStep,responseData}){
                 {/* 수정된 txt파일 내용 */}
 
                 <Divider style={{marginTop:"500px",opacity:0}} />
-
+                <Button variant="contained" color="primary" onClick={downloadAllImages}>
+                    Download Merged Image
+                </Button>
                 <Divider style={{ margin: '20px 0' }} />
 
                 <Box mt={3} display="flex" justifyContent="space-between">

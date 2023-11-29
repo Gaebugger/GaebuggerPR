@@ -6,6 +6,7 @@ import './StartIndex.css';
 import CheckEvaluate from './check/CheckEvaluate';
 import { Routes, Route } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import { CanvasProvider } from './CanvasProvider';
 
 function StartIndex() {
     return (
@@ -22,7 +23,11 @@ function StartIndex() {
                         </div>
                         }
                     />
-                    <Route path="/check" element={<CheckEvaluate />} />
+                    <Route path="/check" element={
+                        <CanvasProvider>
+                            <CheckEvaluate />
+                        </CanvasProvider>
+                    } />
                 </Routes>
             </main>
             <Footer />

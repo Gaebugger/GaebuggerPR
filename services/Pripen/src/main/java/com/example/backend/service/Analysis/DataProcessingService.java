@@ -152,6 +152,9 @@ public class DataProcessingService {
                 issue.setIssue_paragraph_id(issue.getIssue_paragraph_id() + 1);
             }
         }
+
+        // db 저장 로직 구현
+
         // 중복 이슈 제거
         responseDTO.getProcess_Issues().forEach(issue -> {
             List<String> distinctReasons = issue.getIssue_reason().stream()

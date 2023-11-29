@@ -92,7 +92,6 @@ function CheckEvaluate() {
 
     return (
         <div className="jiji">
-            
             <Helmet>
                 <title>개인정보 처리방침 진단</title>
             </Helmet>

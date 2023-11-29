@@ -27,7 +27,7 @@ public class ReceiveDataController {
         this.dataProcessingService = dataProcessingService;
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com" })
+    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"})
     @PostMapping("/start")
     public ResponseEntity<Map<String, UUID>> receiveData(
             @RequestPart("file") MultipartFile file,
@@ -50,7 +50,7 @@ public class ReceiveDataController {
 
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com"})
+    @CrossOrigin(origins = {"https://www.pri-pen.com" ,"http://localhost:3000"})
     @GetMapping("/check-response/{processId}")
     public SseEmitter checkResponse(@PathVariable String processId) throws Exception {
         UUID parsedProcessId;
@@ -62,10 +62,10 @@ public class ReceiveDataController {
         SseEmitter emitter = new SseEmitter();
 
         // real-mode
-        CompletableFuture<Void> future = dataProcessingService.processData(parsedProcessId, emitter);
+        //CompletableFuture<Void> future = dataProcessingService.processData(parsedProcessId, emitter);
 
         // test-mode
-        //CompletableFuture<Void> future = dataProcessingService.processData_test(parsedProcessId,emitter);
+        CompletableFuture<Void> future = dataProcessingService.processData_test(parsedProcessId,emitter);
 
         return emitter;
     }
@@ -73,7 +73,7 @@ public class ReceiveDataController {
     // test endpoint
 //    @CrossOrigin(origins = "http://localhost:3000")
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com"})
+    @CrossOrigin(origins = {"https://www.pri-pen.com", "http://localhost:3000"})
     @PostMapping("/test-mock")
     public ResponseEntity<Map<String, Object>> getMockData(@RequestBody String process_ID) {
         // 임의의 데이터 생성

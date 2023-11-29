@@ -68,9 +68,13 @@ const StyledTablePagination = styled(TablePagination)(({ theme ,page,count,rowsP
 
     
 
-const TablePage = ({ selectedIssueType,setSelectedIssueType,filteredIssues, handleButtonClick}) => {
+const TablePage = ({ captureCanvas, selectedIssueType,setSelectedIssueType,filteredIssues, handleButtonClick}) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    // 현재 페이징 상태 저장
+    const [showCheckColumn, setShowCheckColumn] = useState(true);
+    const [originalPage, setOriginalPage] = useState(page);
+    const [originalRowsPerPage, setOriginalRowsPerPage] = useState(rowsPerPage);
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -79,12 +83,28 @@ const TablePage = ({ selectedIssueType,setSelectedIssueType,filteredIssues, hand
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);  // 페이지당 행 수를 변경하면 페이지를 처음 페이지로 초기화
     };
+    
+    useEffect(() => {
+        // 전체 데이터 표시
+        setPage(0);
+        setRowsPerPage(filteredIssues.length);
+        setShowCheckColumn(false);
+        setTimeout(()=>{
+            captureCanvas('section5', 5);
+            setTimeout(()=>{
+                // 원래 페이징 상태로 복원
+                setPage(originalPage);
+                setRowsPerPage(originalRowsPerPage);
+                setShowCheckColumn(true);
+            },500);
+        },200);
+    }, []);
 
     const reasons = filteredIssues.map(issue => issue.issue_reason);
     console.log("reasons is");
     console.log(reasons);
     return(
-        <StyledPaper elevation={3} style={{ margin: '10px', padding: '20px' }}>
+        <StyledPaper  elevation={3} style={{ margin: '10px', padding: '20px' }}>
             <Box sx={{ minWidth: 180 }}>
                 <FormControl variant="outlined" sx={{width: "auto"}} >
                     <InputLabel id="issue-type-label" sx={{fontSize: "13px"}}>유형 선택</InputLabel>
@@ -108,31 +128,31 @@ const TablePage = ({ selectedIssueType,setSelectedIssueType,filteredIssues, hand
             </Box>
 
 
-            <Table style={{ width: "100%"}}>
+            <Table id="section5" style={{ width: "100%"}}>
                 <TableHead>
                     <TableRow style={{}}>
                         <TableCell style={{fontFamily:"NotoSansKR-Bold", width:"8%"}}>번호</TableCell>
                         <TableCell style={{fontFamily:"NotoSansKR-Bold",width:"17%"}}>진단 유형</TableCell>
                         <TableCell style={{fontFamily:"NotoSansKR-Bold",width:"40%"}}>위반 내용</TableCell>
                         <TableCell style={{fontFamily:"NotoSansKR-Bold",width:"25%"}}>진단 근거</TableCell>
-                        <TableCell style={{fontFamily:"NotoSansKR-Bold",width:"10%",textAlign:"center"}}>확인하기</TableCell>
+                        {showCheckColumn && <TableCell style={{fontFamily:"NotoSansKR-Bold",width:"10%",textAlign:"center"}}>확인하기</TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {filteredIssues.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(issue => (
-                        <TableRow key={issue.issue_id}>
-                            <TableCell style={{width:"8%", fontFamily:"NotoSansKR-Regular"}}>{issue.issue_id}</TableCell>
-                            <TableCell style={{width:"17%", fontFamily:"NotoSansKR-Regular"}}>
+                        <TableRow key={issue.issue_id} >
+                            <TableCell style={{width:"8%", fontFamily:"NotoSansKR-Regular",padding:'16px'}}>{issue.issue_id}</TableCell>
+                            <TableCell style={{width:"17%", fontFamily:"NotoSansKR-Regular",padding:'16px'}}>
                                 {issue.issue_type}
                                 {issue.issue_type === "법률 위반" && <span style={{color: "red", fontWeight: "bold", marginLeft: "7px"}}>(-15)</span>}
                                 {issue.issue_type === "법률 위반 위험" && <span style={{color: "orange", fontWeight: "bold", marginLeft: "7px"}}>(-7)</span>}
                                 {issue.issue_type === "작성지침 미준수" && <span style={{color: "gold", fontWeight: "bold", marginLeft: "7px"}}>(-3)</span>}
                                 {issue.issue_type === "기재 항목 누락" && <span style={{color: "purple", fontWeight: "bold", marginLeft: "7px"}}>(-{issue.issue_score})</span>}
                             </TableCell>
-                            <TableCell style={{width:"40%", fontFamily:"NotoSansKR-Regular"}}>{issue.issue_content}</TableCell>
-                            <TableCell style={{ width: "25%", fontFamily: "NotoSansKR-Regular" }}>
+                            <TableCell style={{width:"40%", fontFamily:"NotoSansKR-Regular",paddingLeft:'16px',paddingRight:'30px'}}>{issue.issue_content}</TableCell>
+                            <TableCell style={{ width: "25%", fontFamily: "NotoSansKR-Regular",padding:'16px'}}>
                                 {Array.isArray(issue.issue_reason) ? (
-                                    <ul>
+                                    <ul style={{padding:'0px'}}>
                                     {issue.issue_reason.map((reason, index) => (
                                         <li key={index}>{reason}</li>
                                     ))}
@@ -141,6 +161,7 @@ const TablePage = ({ selectedIssueType,setSelectedIssueType,filteredIssues, hand
                                     issue.issue_reason
                                 )}
                             </TableCell>
+                            {showCheckColumn && (
                             <TableCell style={{width:"10%", fontFamily:"NotoSansKR-Regular",textAlign:"center"}}>
                                 {issue.issue_type === "기재 항목 누락" ? (
                                     // '기재 항목 누락' 이슈 타입에 대한 '모범 사례' 버튼
@@ -158,8 +179,8 @@ const TablePage = ({ selectedIssueType,setSelectedIssueType,filteredIssues, hand
                                     확인
                                     </Button>
                                 )}
-                                </TableCell>
-
+                            </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>
@@ -181,35 +202,6 @@ const TablePage = ({ selectedIssueType,setSelectedIssueType,filteredIssues, hand
                     }}
                 />
             </Box>
-            {/*<Box sx={{*/}
-            {/*    display: 'flex',*/}
-            {/*    justifyContent: 'center',*/}
-            {/*    alignItems: 'center',*/}
-            {/*    '& > *': { margin: 1 }  // Box 내부의 모든 직계 자식에 적용될 스타일*/}
-            {/*}}>*/}
-            {/*    <TablePagination*/}
-            {/*        component="div"*/}
-            {/*        count={filteredIssues.length}  // 필터링된 행의 수*/}
-            {/*        rowsPerPage={rowsPerPage}*/}
-            {/*        page={page}*/}
-            {/*        labelDisplayedRows={({ count }) => {*/}
-            {/*            const totalPages = Math.ceil(count / rowsPerPage);*/}
-            {/*            return (*/}
-            {/*                <div>*/}
-            {/*                    페이지: {page + 1} / {totalPages}*/}
-            {/*                    <br />*/}
-            {/*                    전체: {count} 건의 위반 문장*/}
-            {/*                </div>*/}
-            {/*            );*/}
-            {/*        }}*/}
-            {/*        onPageChange={handleChangePage}*/}
-            {/*        onRowsPerPageChange={handleRowsPerPageChange}*/}
-            {/*        rowsPerPageOptions={[3, 5, 10]}*/}
-            {/*        labelRowsPerPage="페이지당 위반 문장 수" // 이 부분을 변경*/}
-
-            {/*        style={{display:"flex",justifyContent:"center",alignContent:"center"}}*/}
-            {/*    />*/}
-            {/*</Box>*/}
 
         </StyledPaper>
     );
