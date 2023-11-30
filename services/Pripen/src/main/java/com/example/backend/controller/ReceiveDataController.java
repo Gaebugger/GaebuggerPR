@@ -2,8 +2,12 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.ReceivedDataDTO;
 import com.example.backend.service.Analysis.DataProcessingService;
+import com.example.backend.service.Analysis.Report.PdfService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -11,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,9 +27,10 @@ public class ReceiveDataController {
 
     private ConcurrentMap<String, Boolean> processStatus = new ConcurrentHashMap<>();
     private final DataProcessingService dataProcessingService;
-
-    public ReceiveDataController(DataProcessingService dataProcessingService) {
+    private final PdfService pdfService;
+    public ReceiveDataController(DataProcessingService dataProcessingService,PdfService pdfService) {
         this.dataProcessingService = dataProcessingService;
+        this.pdfService = pdfService;
     }
 
     @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"})
@@ -72,6 +78,25 @@ public class ReceiveDataController {
 
     // test endpoint
 //    @CrossOrigin(origins = "http://localhost:3000")
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/download")
+    public ResponseEntity<?> downloadReport(@RequestParam("files") List<MultipartFile> files) throws IOException {
+        String pdfFilePath = pdfService.createPdf(files);
+        FileSystemResource file = new FileSystemResource(pdfFilePath);
+
+        String filename = file.getFilename();
+
+        // 클라이언트가 파일을 다운로드 할 수 있도록 헤더를 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(file);
+    }
+
 
     @CrossOrigin(origins = {"https://www.pri-pen.com", "http://localhost:3000"})
     @PostMapping("/test-mock")
