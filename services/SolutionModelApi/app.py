@@ -28,6 +28,8 @@ from llama_index import GPTVectorStoreIndex, StorageContext
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 
 
+import re
+
 app = Flask(__name__)
 
 @app.route('/process-text', methods=['POST'])
@@ -65,8 +67,6 @@ def process_text():
     # <내부 알고리즘 동작>
     unique_title_list, title_dict, title_dict2, omission_text, unique_title_dict , unique_title_dict2, df, process_Omission_Paragraph, omission_Issues, issue_id= Search_Match_Omission_Model(user_input)
 
-
-
     print("추출한 '고유 대제목'과 그에 해당하는 룰\n")
     print(unique_title_dict,"\n")
     print(unique_title_dict2,"\n")
@@ -80,32 +80,50 @@ def process_text():
     answer_text, process_Paragraph,process_Issues, process_Law_Violate, process_Law_Danger, process_Guide_Violate = Answer_Frame(df, text, issue_id, original_df)
     
     # <출력사항>
-    omission_text = "*<누락 관련 사항>*\n" + omission_text+"\n\n"
+    if(omission_text==""):
+        omission_text = "없음"
+    omission_text = "*<기재항목 누락 관련 사항>*\n" + omission_text+"\n\n"
     final_answer_text = omission_text + answer_text
     print(final_answer_text)
 
     # 벡터 DB 파트 주석처리 실제 정확한 Answer만 insert
-    '''
+
+    ## 1. 벡터 DB 삽입할 데이터 정제
+    text = re.sub(r'\n\n\n\n\d+> instruction:.*?(\n|$)', '', final_answer_text)
+    text = re.sub(r'최종 결과\n\n법률 위반: \d+건\n법률 위반 위험: \d+건\n작성지침 미준수: \d+건', '', text)
+    pattern1 = r"\*<누락 관련 사항>\*(.*?)\n\n"
+    pattern2 = re.findall(r'(\*\*규칙\d+:.*?)(?=\*\*규칙|$)', text, re.DOTALL)
+
+    violation_part1 = re.search(pattern1, text, re.DOTALL)
+    # Extracting each rule section along with its violation details
+    violation_part2 = ""
+    violation_part2 += str(violation_part1)
+    for section in pattern2:
+        # Check if the section contains a violation
+        if "위반 사항: 있음" in section:
+            violation_part2+=str(section.strip())
+
+    violation_text = violation_part2
+    print(violation_text)
     # 벡터 DB에 answer_text를 insert
-    ## 1. answer를 {process_Id}.txt로 data폴더에 저장 후 모든 파일 재업로드
-    answer_text="이렇게 하시오."
-    with open("./data/{}.txt".format(process_Id), "w", encoding="utf-8") as file:
-        file.write(answer_text)
-    documents = SimpleDirectoryReader("./data").load_data()
-    print(documents)
-    ## 2. 파인콘 벡터 DB 시작
+    ## 2. violation_text를 벡터화
+    response = openai.Embedding.create(
+        input= violation_text,
+        model = "text-embedding-ada-002"
+    )
+
+    ## 3. 파인콘 벡터 DB 시작
     ## 인덱스 이름은 PriPen
     pinecone.init(api_key=pinecone_api_key, environment="gcp-starter")
+    index = pinecone.Index('pdf-index')
 
-    ## 3. data폴더의 txt들을 전부 임베딩하여 PineCone의 PriPen 인덱스에 저장
-    pinecone_index = pinecone.Index("pripen")  # 벡터 DB 인덱스 이름 PriPen으로 설정
-    vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
-    storage_context = StorageContext.from_defaults(vector_store=vector_store)
-    index = GPTVectorStoreIndex.from_documents(
-        documents,
-        storage_context=storage_context
-    )
-    '''
+    ## 4. data폴더의 txt들을 전부 임베딩하여 PineCone의 PriPen 인덱스에 저장
+    # 메타데이터 삽입
+    id = str("pripen")
+    vec = response.data[0]["embedding"]
+    metadata = {'state': "user_Violation"}
+    index.upsert(vectors=[(id, vec, metadata)])
+
     # <JSON 데이터>
     # 백엔드로 넘길 json데이터 구조
     backend_json = {"process_Id":process_Id, "process_Original":text, "process_Score":0, "process_Law_Violate":0, "process_Law_Danger": 0,
@@ -125,6 +143,7 @@ def process_text():
     sorted_Issues = sorted(backend_json["process_Issues"], key=lambda x: x['issue_paragraph_id'])
     backend_json["process_Issues"] = sorted_Issues
 
+    backend_json["pab_Message"] = final_answer_text
 
     print("<최종 추출된 JSON 데이터>", backend_json)
     response_data = json.dumps(backend_json, ensure_ascii=False)

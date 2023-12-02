@@ -12,7 +12,6 @@ print(api_key)
 
 # Module
 # from .Answer_Prompt_Template import chatchain
-
 from .Answer_Prompt_Template import Answer_Template
 from .Rule_Validation.Rule_Validation import checking_answer_template
 from .Make_Json import Make_Issues, Make_Paragraph
@@ -20,7 +19,6 @@ from .Make_Json import Make_Issues, Make_Paragraph
 # Async
 import time
 import asyncio
-
 from langchain.llms import OpenAI
 
 # 이제 async_generate는 인덱스와 함께 결과를 반환
@@ -30,7 +28,7 @@ async def async_generate(llm, policy, instruction, index):
 
 # 결과를 인덱스와 함께 수집하고, 이를 다시 정렬
 async def generate_concurrently(df):
-    llm = OpenAI(temperature=0, model_name='gpt-4')
+    llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4')
     tasks = [async_generate(llm, df['matched_part'][i], df['instruction'][i], i) for i in range(len(df))]
     results = await asyncio.gather(*tasks)
     # 인덱스를 기준으로 결과를 정렬합니다.

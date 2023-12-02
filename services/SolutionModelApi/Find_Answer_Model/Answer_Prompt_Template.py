@@ -1,27 +1,6 @@
 #최종 답변주는 템플릿 모듈 (PromptTemplate & chain)
-import sys
-import os
-
-
-import config
-api_key = os.getenv("OPENAI_API_KEY")
-
-
-'''
-from langchain.chains import LLMChain
-from langchain.chat_models import ChatOpenAI
-
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-)
-'''
-from langchain.llms import OpenAI
-
-# chat = ChatOpenAI(model_name='gpt-4',temperature=0)
-llm = OpenAI(temperature=0.55, model_name='gpt-4')
-
 # 최종 Answer주는 프롬프트의 템플릿
+
 def Answer_Template(policy, instruction):
     template=f'''
     너는 <개인정보처리방침>을 진단하는 솔루션이야. 
