@@ -13,7 +13,7 @@ import {
     StyledPaper, 
 } from './styles/ComponentStyles';
 import { useCanvas } from "../../CanvasProvider";
-function Guideline_detail({processId, prevStep,responseData}){
+function Guideline_detail({ prevStep,responseData,infoObject}){
     // 임의의 데이터    
     const { captureCanvas, downloadAllImages } = useCanvas();
     const [selectedIssueList, setSelectedIssueList] = useState(null);
@@ -51,6 +51,10 @@ function Guideline_detail({processId, prevStep,responseData}){
     const handleOptionChange = (option) => {
         setSelectedOption(option);
     }
+      // 이미지를 업로드하고 PDF를 다운로드하는 함수
+    const handleDownloadClick = () => {
+        downloadAllImages(infoObject.name, infoObject.companyName);
+    };
     const handleButtonClick = (issue) => {
         setSelectedButtonIssue(null);
         setTimeout(() => {
@@ -133,7 +137,7 @@ function Guideline_detail({processId, prevStep,responseData}){
                 {/* 수정된 txt파일 내용 */}
 
                 <Divider style={{marginTop:"500px",opacity:0}} />
-                <Button variant="contained" color="primary" onClick={downloadAllImages}>
+                <Button variant="contained" color="primary" onClick={handleDownloadClick}>
                     Download Merged Image
                 </Button>
                 <Divider style={{ margin: '20px 0' }} />

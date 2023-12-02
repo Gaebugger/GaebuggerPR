@@ -9,6 +9,8 @@ import solutionImage from '../../assets/images/pripen.png';
 import { Button } from '@mui/material';
 import {styled} from '@mui/material/styles';
 import { Link } from 'react-router-dom';
+import InfoDiagSection from './diagnosisIntroduceSection/InfoDiagSection';
+import MoreFunc from './diagnosisIntroduceSection/MoreFunc';
 
 
 function AnimatedSection({ className, title, content }) {
@@ -57,21 +59,36 @@ function Home() {
 
             <Header />
             <main className="home-content">
-            <div className="introduce-sec">
-                <div className="introduce-content">
-                    <AnimatedSection
-                        className="introduction"
-                        title={<><span>개인정보 처리방침을 위한</span><br /><span>진단 솔루션, 프라이펜</span></>}
-                        content="프라이펜으로 손쉽게 진단해보세요."
-                    />
+                <div className="introduce-sec" style={{width:"100%",  padding:"80px 0 80px"}}>
+                    <div className="introduce-content">
+                        <AnimatedSection
+                            className="introduction"
+                            title={<><span>개인정보 처리방침을 위한</span><br /><span>진단 솔루션, 프라이펜</span></>}
+                            content="프라이펜으로 손쉽게 진단해보세요."
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="why-pado"style={{width:"100%", height:"1024px",textAlign:"center"}}>
-                <div className="title" style={{fontFamily:"NotoSansKR-Bold",fontSize:"50px",marginTop:"50px"}}>
-                    <span> 왜 프라이펜이여야 할까요?</span>
+                <div className="what"style={{width:"100%",textAlign:"center"}}>
+                    <div className="what-title" style={{fontFamily:"NotoSansKR-Bold",fontSize:"42px",margin:"50px 0 200px"}}>
+                        <span style={{marginBottom:'30px'}}>개인정보 처리방침 진단</span>
+                        <br/>
+                        <span>오직 </span>
+                        <span style={{fontWeight:"bold",    color:"#007bff"}}>프라이펜</span>
+                        <span>에서만!</span> 
+                    </div>
+                    <div className="what-content" style={{fontFamily:'NotoSansKR-SemiBold'}}>
+                        <InfoDiagSection />
+                    </div>
+                    <div className="what-moreFuncTitle" style={{fontFamily:"NotoSansKR-Bold",fontSize:"32px",margin:"200px 0 100px"}}>
+                        <span>다음 기능들을 제공해요!</span>
+                    </div>
+                    <div className="what-moreFunc" style={{fontFamily:'NotoSansKR-Regular'}}>
+                        <MoreFunc />
+                    </div>
+                </div>
+                <div>
 
                 </div>
-            </div>
             </main>
             <Footer />
         </div>

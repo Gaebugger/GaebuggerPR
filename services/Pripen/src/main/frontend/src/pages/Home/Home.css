@@ -79,7 +79,10 @@
 .animated.fadeInText{
     text-align: initial;
 }
-
+.main-content {
+    min-height: 100vh; /* 높이를 내용에 따라 조절 */
+    /* 기타 스타일링 */
+}
 .section p.animated {
     animation-delay: 1s; /* h2 애니메이션 후 1초 후 시작 */
 }

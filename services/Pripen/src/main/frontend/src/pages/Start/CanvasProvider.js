@@ -41,9 +41,14 @@ export const CanvasProvider = ({ children }) => {
   };
 
   // FormData에 담긴 모든 이미지를 백엔드에 전송하고, 받은 PDF를 다운로드하는 함수
-  const uploadAllImagesAndDownloadPdf = async () => {
+  const uploadAllImagesAndDownloadPdf = async (userName,companyName) => {
     const formData = await appendAllCanvasToFormData(canvases);
     
+    // userName과 companyName을 formData에 추가
+    formData.append("userName", userName);  // 사용자 이름에
+    formData.append("companyName", companyName);  // 회사 이름
+
+
     axios.post('http://localhost:8080/api/download', formData, {
       responseType: 'blob',  // 중요: PDF 파일을 Blob 형태로 받기 위함
       headers: {
