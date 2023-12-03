@@ -1,0 +1,7 @@
+# 모든 CSV 파일을 제외
+*.csv
+
+# config 폴더와 그 안의 모든 내용을 제외
+config/
+
+Lib/
