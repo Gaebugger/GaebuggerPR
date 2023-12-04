@@ -17,7 +17,7 @@ import { styled } from '@mui/system';
 import '../../assets/fonts/fonts.css';
 import BestPractice from "../bestpractice/BestPractice";
 
-const StyledTablePagination = styled(TablePagination)(({ theme ,page,count,rowsPerPage}) => ({
+const StyledTablePagination = styled(TablePagination)(({page,count,rowsPerPage}) => ({
     display: 'flex',
     width: '100%',
     justifyContent: 'space-around',

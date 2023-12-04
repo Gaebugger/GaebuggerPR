@@ -75,26 +75,26 @@ export const CanvasProvider = ({ children }) => {
     });
   };
 
-  // const downloadImage = (canvas, filename) => {
-  //   if (!canvas) return;
+  const downloadImage = (canvas, filename) => {
+    if (!canvas) return;
 
-  //   const image = canvas.toDataURL('image/png');
-  //   const downloadLink = document.createElement('a');
-  //   downloadLink.href = image;
-  //   downloadLink.download = `${filename}.png`;
-  //   downloadLink.click();
-  // };
+    const image = canvas.toDataURL('image/png');
+    const downloadLink = document.createElement('a');
+    downloadLink.href = image;
+    downloadLink.download = `${filename}.png`;
+    downloadLink.click();
+  };
 
-  // const downloadAllImages = () => {
-  //   Object.entries(canvases).forEach(([key, canvas]) => {
-  //     downloadImage(canvas, key); // 각 캔버스에 대한 다운로드
-  //   });
-  // };
+  const downloadAllImages = () => {
+    Object.entries(canvases).forEach(([key, canvas]) => {
+      downloadImage(canvas, key); // 각 캔버스에 대한 다운로드
+    });
+  };
 
   const contextValue = {
     canvases,
     captureCanvas,
-    downloadAllImages: uploadAllImagesAndDownloadPdf // 모든 이미지를 다운로드하는 함수
+    downloadAllImages, // : uploadAllImagesAndDownloadPdf // 모든 이미지를 다운로드하는 함수
   };
 
   return (

@@ -4,7 +4,6 @@ import "./Signup.css";
 import axios from "axios";
 const Signup2 = ({userData, nextStep}) => {
     const email = userData.email;
-    const [code, setCode] = useState(''); // 인증 코드 상태
     const [codeError, setCodeError] = useState(''); // 인증 코드 에러 메시지 상태
 
     // 이메일 전송 함수
@@ -57,7 +56,7 @@ const Signup2 = ({userData, nextStep}) => {
             background: '#E2F5FF',
             height: '100vh'
             }}>
-            <SignupForm2 verifyCode={verifyCode} codeError={codeError} code={code} setCode={setCode}/>
+            <SignupForm2 verifyCode={verifyCode} codeError={codeError} />
         </div>
     );
 };

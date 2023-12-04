@@ -238,7 +238,7 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
                     <h1 style={{marginLeft:'20px', fontFamily: "NotoSansKR-SemiBold"}}>대시보드</h1>
                     <Divider style={{marginBottom:'30px'}} />
                     <StyledPaper>
-                        <ResultBoxSection serverData={serverData} captureCanvas={captureCanvas}/>
+                        <ResultBoxSection serverData={serverData}/>
                         <Divider style={{margin: "50px", opacity:0}} />
                         <h2 style={{marginLeft:'20px', fontFamily: "NotoSansKR-Medium"}}>점수</h2>
                         <Divider style={{marginBottom:'10px'}} />
@@ -246,7 +246,7 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
                             <span style={{ fontWeight: "bold", fontSize: "1.2em",color:"black" }}>{serverData['industryType']}</span>님의 개인정보 처리방침 진단 결과를 토대로 계산한 점수입니다.
                         </h3>
                         <div className="score-whyscore" style={{borderRadius: '10px',backgroundColor: "#ffffff", border: '3px solid #F2F2F2',marginTop:"40px", marginLeft:"20px",marginRight:"20px"}}>
-                            <ResultScore captureCanvas={captureCanvas} data={serverData} pieData={pieData} total={total} />  
+                            <ResultScore data={serverData} pieData={pieData} total={total} />  
                         </div>
                     </StyledPaper>
                     <Divider style={{marginBottom:"20px",opacity:0}} />
@@ -259,7 +259,7 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
                             <span style={{ fontWeight: "bold", fontSize: "1.2em",color:"black" }}>{serverData['industryType']}</span>님의 결과와 업종 평균 값과 비교해 보세요
                     </h3>
                     <Divider style={{marginBottom:'20px',opacity:0}} />
-                    <BarChartComponent captureCanvas={captureCanvas} data={graphData} />
+                    <BarChartComponent data={graphData} />
                 </div>
                 <Divider style={{margin: "100px", opacity:0}} />
 
@@ -276,7 +276,7 @@ function Step4({ processId, nextStep,responseData,infoObject }) {
                             <IssuePopover />
                         </div> */}
                     </div>
-                    <NonConformityCheck captureCanvas={captureCanvas} data={extractedData} omissionData={omissionParagraphIssues} />
+                    <NonConformityCheck data={extractedData} omissionData={omissionParagraphIssues} />
                 </div>
                 <Divider style={{margin: "100px", opacity:0}} />
 

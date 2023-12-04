@@ -17,7 +17,7 @@ const Header = ({ active }) => {
         return (
             <div className="dropdown-menu" onMouseLeave={onClose}>
                 {items.map((item, idx) => (
-                    <Link key={idx} to={item.link} className="dropdown-item">
+                    <Link key={idx} to={item.link} className="dropdown-item" style={{fontFamily:'NotoSansKR-Regular', fontSize:'14px'}}>
                         {item.label}
                     </Link>
                 ))}
@@ -48,34 +48,27 @@ const Header = ({ active }) => {
                         onMouseEnter={() => setShowContactDropdown(true)}
                         onMouseLeave={() => setShowContactDropdown(false)}
                     >
-                        <Link to="/contact" className={active === "contact" ? "active-link" : ""}>주요 기능</Link>
-                        <CustomDropdown 
-                            isOpen={showContactDropdown}
-                            items={[
-                                { label: '파도는', link: '/contact/subpage1' },
-                                { label: 'contact us', link: '/contact/subpage2' }
-                            ]}
-                        />
+                        <Link to="/" className={active === "contact" ? "active-link" : ""}>주요 기능</Link>
                     </li>
                     <li 
                         onMouseEnter={() => setShowServicesDropdown(true)}
                         onMouseLeave={() => setShowServicesDropdown(false)}
                     >
-                        <Link to="/services" className={active === "services" ? "active-link" : ""}>사용 사례</Link>
+                        <Link to="/introduce/pripen" className={active === "introduce" ? "active-link" : ""}>회사 소개</Link>
                         <CustomDropdown 
                             isOpen={showServicesDropdown}
                             items={[
-                                { label: '개인정보 처리방침 진단', link: '/services/check' },
-                                { label: '하위 페이지 2', link: '/contact/subpage2' }
+                                { label: 'Pripen', link: '/introduce/pripen' },
+                                { label: 'Gaebugger', link: '/introduce/gaebugger' }
                             ]}
                         />
                     </li>
-                    <li>
+                    {/* <li>
                         <Link to="/guidelines" className={active === "guidelines" ? "active-link" : ""}>리소스</Link>
                     </li>
                     <li>
                         <Link to="/guidelines" className={active === "guidelines" ? "active-link" : ""}>사용 문의</Link>
-                    </li>
+                    </li> */}
                     <li>
                         <Button 
                             variant="outlined" 

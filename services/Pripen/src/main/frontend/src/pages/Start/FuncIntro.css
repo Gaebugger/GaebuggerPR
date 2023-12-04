@@ -1,0 +1,28 @@
+.feature-container {
+    display: flex;
+    align-items: center;
+
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    margin: 300px 200px 400px 200px;
+}
+
+.feature-container.visible {
+    opacity: 1;
+}
+
+.feature-container.odd {
+    flex-direction: row;
+    justify-content: start;
+}
+.feature-container.odd .feature-name {
+    margin-right:300px;
+}
+.feature-container.even {
+    flex-direction: row-reverse;
+    justify-content: end;
+}
+.feature-container.even .feature-name {
+    margin-left:300px;
+}

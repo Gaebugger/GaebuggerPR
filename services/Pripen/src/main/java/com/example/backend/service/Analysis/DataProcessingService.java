@@ -153,7 +153,11 @@ public class DataProcessingService {
             }
         }
 
+        // 이슈 정렬
+        responseDTO.sortIssues();
         // db 저장 로직 구현
+
+
 
         // 중복 이슈 제거
         responseDTO.getProcess_Issues().forEach(issue -> {

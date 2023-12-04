@@ -3,6 +3,8 @@ import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Data
@@ -43,5 +45,32 @@ public class ApiResponseDTO {
         private int issue_endIndex;
         private int issue_case;         // 이거 추가됨. issue_case (이건 bp에 보여주려는건데 22개 유형중 어떤 유형의 위반 인지? 2~22사이의 int형 )
         private List<String> issue_guideline;
+    }
+
+    // 이슈 정렬 메소드
+    public void sortIssues() {
+        Collections.sort(this.process_Issues, new Comparator<Issue>() {
+            @Override
+            public int compare(Issue o1, Issue o2) {
+                // 먼저 issue_startIndex로 정렬
+                int startIndexCompare = Integer.compare(o1.getIssue_startIndex(), o2.getIssue_startIndex());
+                if (startIndexCompare != 0) {
+                    return startIndexCompare;
+                }
+
+                // issue_startIndex가 같을 경우 issue_endIndex로 정렬
+                int endIndexCompare = Integer.compare(o1.getIssue_endIndex(), o2.getIssue_endIndex());
+                if (endIndexCompare != 0) {
+                    return endIndexCompare;
+                }
+
+                // 마지막으로 issue_id로 정렬
+                return Integer.compare(o1.getIssue_id(), o2.getIssue_id());
+            }
+        });
+        // 이제 각 이슈의 ID를 업데이트
+        for (int i = 0; i < this.process_Issues.size(); i++) {
+            this.process_Issues.get(i).setIssue_id(i+1); // ID를 0부터 시작하도록 설정
+        }
     }
 }

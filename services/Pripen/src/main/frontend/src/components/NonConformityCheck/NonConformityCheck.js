@@ -4,10 +4,12 @@ import "../../assets/fonts/fonts.css";
 import { makeStyles } from '@mui/styles';
 import BookIcon from '@mui/icons-material/Book';
 import CustomTooltip from './CustomToolTip';
+import { useCanvas } from '../../pages/Start/CanvasProvider';
 
-const NonConformityCheck = ({ captureCanvas, data, omissionData }) => {
+const NonConformityCheck = ({ data, omissionData }) => {
   const [selectedViolations, setSelectedViolations] = useState(['법률 위반','법률 위반 위험','작성지침 미준수']);
   const contentPieces = [];
+  const { captureCanvas} = useCanvas();
   const getMissingIssue = () => {
     const missingIssues = data.issues.filter(issue => issue.startIndex === -999 && selectedViolations.includes(issue.type));
 
@@ -228,7 +230,7 @@ const NonConformityCheck = ({ captureCanvas, data, omissionData }) => {
       captureCanvas('section4', 4);
   
       // 예상되는 캡처 완료 시간 후에 스타일 복원
-      setTimeout(() => {
+      setTimeout(() => {  
         setCaptureStyle({});
       },250); // 예상되는 캡처 시간 설정
     }, 200);

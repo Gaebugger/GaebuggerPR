@@ -1,4 +1,5 @@
 import React from "react";
+import { useInView } from "react-intersection-observer";
 import { Box, Typography,Icon } from "@mui/material";
 import MoneyIcon from '@mui/icons-material/Money';
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
@@ -6,8 +7,45 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import StarIcon from '@mui/icons-material/Star';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import AdbIcon from '@mui/icons-material/Adb';
-import AccessibilityIcon from '@mui/icons-material/Accessibility';
+import './MoreFunc.css';
+
+const BoxItem = ({ box }) => {
+    const [ref, inView] = useInView({
+        triggerOnce: true,
+        threshold: 0.5,
+    });
+
+    return (
+        <Box
+            ref={ref}
+            className={inView ? 'fadeIn' : 'box-hidden'}
+            sx={{
+                border: 1,
+                borderColor: 'grey.300',
+                borderRadius: '20px',
+                boxShadow: 3,
+                p: 2,
+                maxWidth: 300, // 최대 너비 설정
+                flexBasis: 'calc(33.333% - 16px)', // flex-basis를 사용하여 3개의 박스가 한 줄에 들어갈 수 있도록 조정
+                height: 250,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'start',
+                textAlign: 'start',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                    transform: 'translateY(-10px)',
+                    boxShadow: 6,
+                }}}
+        >
+            {box.icon}
+            <Typography variant="h6" style={{margin:'5px', fontFamily:'NotoSansKR-SemiBold' ,textAlign:'start', marginBottom:'20px'}}>{box.title}</Typography>
+            <Typography variant="body1" style={{margin:'5px',fontFamily:'NotoSansKR-Regular'}}>{box.description}</Typography>
+        </Box>
+    );
+};
+
 const MoreFunc = () => {
     const boxes = [
         { title: '점수', description: '개인정보 처리방침의 현재 상황을 수치로 확인해보세요.', icon: <MoneyIcon sx={{width:'50px', height:'50px', marginBottom:'10px', color: '#009bff'}} /> },
@@ -22,36 +60,14 @@ const MoreFunc = () => {
         <Box sx={{
             display: 'flex', 
             flexWrap: 'wrap', 
-            gap: 2, 
+            gap: 3, 
             p: 1, 
             justifyContent: 'center',
-            maxWidth: '100%', // 최대 너비 설정
-        }}>
+            maxWidth: '80%', // 최대 너비 설정
+            }}
+        >
             {boxes.map((box, index) => (
-                <Box key={index} sx={{
-                    border: 1,
-                    borderColor: 'grey.300',
-                    borderRadius: '20px',
-                    boxShadow: 3,
-                    p: 2,
-                    maxWidth: 300, // 최대 너비 설정
-                    flexBasis: 'calc(33.333% - 16px)', // flex-basis를 사용하여 3개의 박스가 한 줄에 들어갈 수 있도록 조정
-                    height: 250,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'start',
-                    textAlign: 'start',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    '&:hover': {
-                        transform: 'translateY(-10px)',
-                        boxShadow: 6,
-                    },
-                }}>
-                    {box.icon}
-                    <Typography variant="h6" style={{margin:'5px', fontFamily:'NotoSansKR-SemiBold' ,textAlign:'start', marginBottom:'20px'}}>{box.title}</Typography>
-                    <Typography variant="body1" style={{margin:'5px',fontFamily:'NotoSansKR-Regular'}}>{box.description}</Typography>
-                </Box>
+                <BoxItem key={index} box={box} />
             ))}
         </Box>
     );
@@ -59,3 +75,31 @@ const MoreFunc = () => {
 };
 
 export default MoreFunc;
+
+
+
+
+
+{/* <Box key={index} sx={{
+    border: 1,
+    borderColor: 'grey.300',
+    borderRadius: '20px',
+    boxShadow: 3,
+    p: 2,
+    maxWidth: 300, // 최대 너비 설정
+    flexBasis: 'calc(33.333% - 16px)', // flex-basis를 사용하여 3개의 박스가 한 줄에 들어갈 수 있도록 조정
+    height: 250,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'start',
+    textAlign: 'start',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    '&:hover': {
+        transform: 'translateY(-10px)',
+        boxShadow: 6,
+    },
+}}>
+
+<Typography variant="h6" style={{margin:'5px', fontFamily:'NotoSansKR-SemiBold' ,textAlign:'start', marginBottom:'20px'}}>{box.title}</Typography>
+<Typography variant="body1" style={{margin:'5px',fontFamily:'NotoSansKR-Regular'}}>{box.description}</Typography> */}
