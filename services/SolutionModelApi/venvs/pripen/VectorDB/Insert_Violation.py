@@ -24,7 +24,7 @@ def Insert_Violation(violation_text):
         ## 3. 파인콘 벡터 DB 시작
         ## 인덱스 이름은 PriPen
         pinecone.init(api_key=pinecone_api_key, environment="gcp-starter")
-        index = pinecone.Index('pdf-index')
+        index = pinecone.Index('Re-diagnosis')
 
         ## 4. data폴더의 txt들을 전부 임베딩하여 PineCone의 PriPen 인덱스에 저장
         # 메타데이터 삽입
