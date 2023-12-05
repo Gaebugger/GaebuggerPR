@@ -10,8 +10,6 @@ import requests
 import re
 from typing import List
 openai.api_key = os.getenv("OPENAI_API_KEY")
-pinecone_api_key = config.PINECONE_API_KEY
-print(pinecone_api_key)
 
 # Module & table 데이터
 from Find_Question_Model.Search_Match_Omission_Model import Search_Match_Omission_Model, table
@@ -21,14 +19,14 @@ from Find_Answer_Model.Answer_Model import *
 from Find_Answer_Model.Answer_Frame import *
 from Find_Question_Model.User_Input_Check import *
 from Text_Preprocessing.Text_Preprocessing import *
+from Text_Preprocessing.Make_Output_Json import *
 
-# 벡터 DB관련
-from llama_index import SimpleDirectoryReader
-import pinecone
-from llama_index import GPTVectorStoreIndex, StorageContext
-from llama_index.vector_stores.pinecone import PineconeVectorStore
+# 벡터DB관련 모듈
+from VectorDB.Extract_Violation import *
+from VectorDB.Insert_Violation import *
+from VectorDB.VectorDB_Frame import *
+
 app = FastAPI()
-
 
 # Define your Pydantic models here
 class ProcessTextRequest(BaseModel):
@@ -71,78 +69,21 @@ def process_text(request: ProcessTextRequest):
     final_answer_text = omission_text + answer_text
     print(final_answer_text)
 
-    # 벡터 DB 파트 주석처리 실제 정확한 Answer만 insert
-
-    ## 1. 벡터 DB 삽입할 데이터 정제
-    # <출력사항>
+    # <최종 출력사항>
     if (omission_text == ""):
         omission_text = "없음"
     omission_text = "*<기재항목 누락 관련 사항>*\n" + omission_text + "\n\n"
     final_answer_text = omission_text + answer_text
     print(final_answer_text)
 
-    # 벡터 DB 파트 주석처리 실제 정확한 Answer만 insert
-    violation_text = "*<기재항목 누락 관련 사항>*\n"
+    # 벡터DB에 재진단 데이터 삽입
+    DB_Insert = VectorDB_Frame(final_answer_text)
+    if(DB_Insert == True):
+        print("벡터 DB삽입에 성공하였습니다.")
+    else:
+        print("벡터 DB삽입에 실패하였습니다.")
 
-    ## 1. 벡터 DB 삽입할 데이터 정제
-    extract_text = re.sub(r'최종 결과\n\n법률 위반: \d건\n법률 위반 위험: \d건\n작성지침 미준수: \d건', '', final_answer_text)
-    extract_text = re.sub(r'\n\n\n\n\d+> instruction:.*?(\n|$)', '', extract_text)
+    backend_json = Make_Output_Json(process_Id, text, process_Law_Violate, process_Law_Danger, process_Guide_Violate, process_Omission_Paragraph, process_Paragraph, omission_Issues, process_Issues)
 
-    pattern1 = re.compile(r'\*<기재항목 누락 관련 사항>\*(.*?)1>', re.DOTALL)
-    missing_items = pattern1.findall(extract_text)
-
-    for item in missing_items:
-        violation_text += str(item)
-
-    pattern２ = re.compile(r'(규칙\d+:.*?위반 유형:.*?위반 문장:.*?)(?=규칙|\Z)', re.DOTALL)
-    all_rules = pattern２.findall(extract_text)
-
-    violation_parts = [part for part in all_rules if '위반 사항: 있음' in part]
-
-    for part in violation_parts:
-        violation_text += str(part) + "\n"
-
-    print("<위반사항 추출 데이터>\n", violation_text)
-
-    # 벡터 DB에 answer_text를 insert
-    ## 2. violation_text를 벡터화
-    response = openai.Embedding.create(
-        input=violation_text,
-        model="text-embedding-ada-002"
-    )
-
-    ## 3. 파인콘 벡터 DB 시작
-    ## 인덱스 이름은 PriPen
-    pinecone.init(api_key=pinecone_api_key, environment="gcp-starter")
-    index = pinecone.Index('pdf-index')
-
-    ## 4. data폴더의 txt들을 전부 임베딩하여 PineCone의 PriPen 인덱스에 저장
-    # 메타데이터 삽입
-    id = str("pripen")
-    vec = response.data[0]["embedding"]
-    metadata = {'state': "user_Violation"}
-    index.upsert(vectors=[(id, vec, metadata)])
-
-    # <JSON 데이터>
-    # 백엔드로 넘길 json데이터 구조
-    backend_json = {"process_Id": process_Id, "process_Original": text, "process_Score": 0, "process_Law_Violate": 0,
-                    "process_Law_Danger": 0,
-                    "process_Guide_Violate": 0, "process_Omission_Paragraph": 0, "process_Paragraph": [],
-                    "process_Issues": [], "process_Modified": ""}
-
-    backend_json["process_Law_Violate"] = process_Law_Violate
-    backend_json["process_Law_Danger"] = process_Law_Danger
-    backend_json["process_Guide_Violate"] = process_Guide_Violate
-    backend_json["process_Omission_Paragraph"] = process_Omission_Paragraph
-    backend_json["process_Paragraph"] = process_Paragraph
-    backend_json["process_Issues"] = omission_Issues
-    backend_json["process_Issues"] += process_Issues
-    # backend_json["process_Modified"] = process_Modified
-
-    # paragraph_id 순으로 정렬
-    sorted_Issues = sorted(backend_json["process_Issues"], key=lambda x: x['issue_paragraph_id'])
-    backend_json["process_Issues"] = sorted_Issues
-
-    print("<최종 추출된 JSON 데이터>", backend_json)
     response_data = json.dumps(backend_json, ensure_ascii=False)
     return JSONResponse(content=json.loads(response_data), media_type="application/json; charset=utf-8")
