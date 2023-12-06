@@ -136,7 +136,7 @@ def Answer_Model(df, text, issue_id_num, original_df):
         ans += str(i+1)+">" +" " + "instruction: " + df['part'][i] + "에 해당하는 가이드라인은 이렇습니다." + "\n" + answer[i] + "\n\n\n\n"
 
         # Make_Issues 함수를 통해 Json형식에 들어갈 데이터 추출
-            # issue_json은 리스트 형태로 된 각 규칙으 딕셔너리 집합체 [{}, {}, {}]
+        # issue_json은 리스트 형태로 된 각 규칙으 딕셔너리 집합체 [{}, {}, {}]
         issue_json, process_Law_Violate_temp, process_Law_Danger_temp, process_Guide_Violate_temp, issue_id_num = Make_Issues(answer[i], i, text, df, original_index, issue_id_num)
 
         process_Law_Violate += process_Law_Violate_temp
