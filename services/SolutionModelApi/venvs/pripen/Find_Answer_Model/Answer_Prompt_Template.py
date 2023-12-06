@@ -1,9 +1,12 @@
 #최종 답변주는 템플릿 모듈 (PromptTemplate & chain)
 # 최종 Answer주는 프롬프트의 템플릿
 
+# Module
+from .Translator import Translator
+
 def Answer_Template(policy, instruction):
     template=f'''
-    너는 <개인정보처리방침>을 진단하는 솔루션이야. 
+    너는 <개인정보처리방침>을 진단하는 솔루션이야.
     <개인정보처리방침> 진단은 무조건 아래 <규칙>만으로 진단해야 해.
     위반 사항은 각각의 <규칙>만으로 판단해야 해. 
     위반 유형은 [법률 위반, 법률 위반 위험, 작성지침 미준수] 딱 3가지가 있어. 이것 이외에는 없어!
@@ -38,10 +41,10 @@ def Answer_Template(policy, instruction):
     (Top-p = 0.1)
     
     <규칙>
-    {instruction}
+    {Translator(instruction)}
     
     <개인정보처리방침>
-    {policy}
+    {Translator(policy)}
     
     <주의사항>
     [예시4]처럼 위반 문장은 개행("\r\n")까지 그대로 포함해서 추출해줘! 개행이 [예시4]처럼 연속으로 붙을 수도 있어!

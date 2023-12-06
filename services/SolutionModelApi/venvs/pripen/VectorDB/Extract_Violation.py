@@ -22,4 +22,10 @@ def Extract_Violation(final_answer_text):
     for part in violation_parts:
         violation_text += str(part) + "\n"
 
-    return violation_text
+    # 파일 저장 경로 설정
+    file_path = './pripen/VectorDB/data/violation_text.txt'
+
+    # 텍스트를 txt 파일로 저장하는 코드
+    with open(file_path, 'w', encoding='utf-8') as file:
+        file.write(violation_text)
+    return True

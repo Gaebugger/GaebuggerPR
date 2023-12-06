@@ -12,29 +12,28 @@ import pinecone
 from llama_index import GPTVectorStoreIndex, StorageContext
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 
-def Insert_Violation(violation_text):
+def Insert_Violation():
     try:
-        # 벡터 DB에 answer_text를 insert
-        ## 2. violation_text를 벡터화
-        response = openai.Embedding.create(
-            input=violation_text,
-            model="text-embedding-ada-002"
-        )
 
-        ## 3. 파인콘 벡터 DB 시작
-        ## 인덱스 이름은 PriPen
-        pinecone.init(api_key=pinecone_api_key, environment="gcp-starter")
-        index = pinecone.Index('Re-diagnosis')
+        pinecone.init(api_key=pinecone_api_key, environment="asia-northeast1-gcp")
+        pinecone_index = pinecone.Index("pdf-index")
 
-        ## 4. data폴더의 txt들을 전부 임베딩하여 PineCone의 PriPen 인덱스에 저장
-        # 메타데이터 삽입
-        id = str("pripen")
-        vec = response.data[0]["embedding"]
-        metadata = {'state': "user_Violation"}
-        index.upsert(vectors=[(id, vec, metadata)])
+        # 문서 로드
+        documents = SimpleDirectoryReader("./pripen/VectorDB/data").load_data()
 
-        return True
+        # Pinecone 벡터 스토어 생성, 네임 스페이스는 pripen
+        vector_store = PineconeVectorStore(pinecone_index=pinecone_index, namespace='pripen')
 
+        # 스토리지 컨텍스트 생성
+        storage_context = StorageContext.from_defaults(vector_store=vector_store)
+
+        # 문서에서 GPT 벡터 스토어 인덱스 생성
+        GPTVectorStoreIndex.from_documents(documents=documents, storage_context=storage_context)
+
+        # 벡터 스토어에서 GPT 벡터 스토어 인덱스 생성
+        GPTVectorStoreIndex.from_vector_store(vector_store)
+
+        return  True
     except ValueError as e:
         print(f"설정 오류: {e}")
         return False
