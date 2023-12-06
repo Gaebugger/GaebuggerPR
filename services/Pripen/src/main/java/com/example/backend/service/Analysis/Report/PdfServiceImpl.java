@@ -43,8 +43,13 @@ import java.util.stream.Collectors;
 public class PdfServiceImpl implements PdfService {
 
     public String createPdf(List<MultipartFile> files,String userName, String companyName) throws IOException {
-        String tempPdfFilePath = "./TemporaryStorage/temp_generated_pdf.pdf"; // 임시 파일 경로
-        String finalPdfFilePath = "./TemporaryStorage/generated_pdf.pdf"; // 최종 파일 경로
+        String tempStoragePath = System.getenv("REPORT_STORAGE_PATH");
+        if (tempStoragePath == null) {
+            // 개발 환경에서 사용할 기본 경로
+            tempStoragePath = "./TemporaryStorage";
+        }
+        String tempPdfFilePath = tempStoragePath + "/temp_generated_pdf.pdf";
+        String finalPdfFilePath = tempStoragePath + "/generated_pdf.pdf"; // 최종 파일 경로
 
         // 임시 PDF 파일에 이미지 추가
         PdfWriter tempWriter = new PdfWriter(tempPdfFilePath);
@@ -93,10 +98,8 @@ public class PdfServiceImpl implements PdfService {
 
         // 텍스트에 한글 폰트 적용
         Paragraph title = new Paragraph("프라이펜 개인정보 처리방침 진단 레포트").setFont(koreanFont).setFontSize(24).setBold();
-        Paragraph subtitle = new Paragraph("prototype-V").setFont(koreanFont).setFontSize(18);
 
         document.add(title);
-        document.add(subtitle);
 
         // 날짜 추가
         String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

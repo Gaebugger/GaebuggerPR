@@ -5,7 +5,6 @@ import './Home.css';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/Footer';
 import '../../assets/fonts/fonts.css';
-import solutionImage from '../../assets/images/homeImages/메인이미지.png';
 import { Button } from '@mui/material';
 import {styled} from '@mui/material/styles';
 import { Link } from 'react-router-dom';
@@ -45,7 +44,7 @@ function AnimatedSection({ className, title, content }) {
                 </Link>
             </div>
             <div className="image-container">
-                <img src={solutionImage} alt="Illustration" className={inView ? 'animated fadeInImage' : ''}/>
+                <img src='/assets/images/homeImages/메인이미지.png' alt="Illustration" className={inView ? 'animated fadeInImage' : ''}/>
             </div>
         </section>
     );

@@ -47,8 +47,15 @@ export const CanvasProvider = ({ children }) => {
     // userName과 companyName을 formData에 추가
     formData.append("userName", userName);  // 사용자 이름에
     formData.append("companyName", companyName);  // 회사 이름
+    //axois.post('https://backapi.pri-pen.com/api/download', formData,{
+    //   responseType: 'blob',  // 중요: PDF 파일을 Blob 형태로 받기 위함
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // })
 
-
+    //https://backapi.pri-pen.com/api/download
+    //http://localhost:8080/api/download
     axios.post('http://localhost:8080/api/download', formData, {
       responseType: 'blob',  // 중요: PDF 파일을 Blob 형태로 받기 위함
       headers: {
@@ -75,26 +82,25 @@ export const CanvasProvider = ({ children }) => {
     });
   };
 
-  const downloadImage = (canvas, filename) => {
-    if (!canvas) return;
+  // const downloadImage = (canvas, filename) => {
+  //   if (!canvas) return;
+  //   const image = canvas.toDataURL('image/png');
+  //   const downloadLink = document.createElement('a');
+  //   downloadLink.href = image;
+  //   downloadLink.download = `${filename}.png`;
+  //   downloadLink.click();
+  // };
 
-    const image = canvas.toDataURL('image/png');
-    const downloadLink = document.createElement('a');
-    downloadLink.href = image;
-    downloadLink.download = `${filename}.png`;
-    downloadLink.click();
-  };
-
-  const downloadAllImages = () => {
-    Object.entries(canvases).forEach(([key, canvas]) => {
-      downloadImage(canvas, key); // 각 캔버스에 대한 다운로드
-    });
-  };
+  // const downloadAllImages = () => {
+  //   Object.entries(canvases).forEach(([key, canvas]) => {
+  //     downloadImage(canvas, key); // 각 캔버스에 대한 다운로드
+  //   });
+  // };
 
   const contextValue = {
     canvases,
     captureCanvas,
-    downloadAllImages, // : uploadAllImagesAndDownloadPdf // 모든 이미지를 다운로드하는 함수
+    downloadAllImages : uploadAllImagesAndDownloadPdf // 모든 이미지를 다운로드하는 함수
   };
 
   return (

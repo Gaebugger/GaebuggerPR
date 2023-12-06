@@ -136,10 +136,15 @@ function Guideline_detail({ prevStep,responseData,infoObject}){
 
                 {/* 수정된 txt파일 내용 */}
 
-                <Divider style={{marginTop:"500px",opacity:0}} />
-                <Button variant="contained" color="primary" onClick={handleDownloadClick}>
-                    Download Merged Image
-                </Button>
+                <Divider style={{marginTop:"100px",opacity:0}} />
+                <div className="report-download">
+                    <h2 style={{fontFamily:"NotoSansKR-SemiBold", marginLeft: "20px"}}>보고서 다운로드</h2>
+                    <Divider style={{marginBottom:'10px'}} />
+                    <h3 style={{marginLeft:"25px", fontFamily:"NotoSansKR-Medium", color:"#999"}}>지금까지 나온 내용을 담은 파일을 pdf로 다운 받을 수 있습니다.</h3>
+                    <Button variant="contained" color="primary" onClick={handleDownloadClick} style={{marginLeft:'30px', marginTop:'20px'}}>
+                            다운로드
+                    </Button>
+                </div>
                 <Divider style={{ margin: '20px 0' }} />
 
                 <Box mt={3} display="flex" justifyContent="space-between">

@@ -7,7 +7,6 @@ import ScoreDisplay from '../../../../components/scoredisplay/ScoreDisplay';
 import NonConformityCheck from '../../../../components/NonConformityCheck/NonConformityCheck';
 import '../compactContainer.css';
 import './Step4.css';
-import '../../../../assets/fonts/fonts.css';    
 import CustomizedSteppers from '../../../../components/StepIndicator/StepIndicator';
 import { StyledPaper } from '../Guideline_detail/styles/ComponentStyles';
 import { useCanvas } from "../../CanvasProvider";
