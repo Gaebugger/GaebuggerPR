@@ -5,6 +5,9 @@
 from .Translator import Translator
 
 def Answer_Template(policy, instruction):
+    T_Instruction = Translator(instruction)
+    T_Policy = Translator(policy)
+
     template=f'''
     너는 <개인정보처리방침>을 진단하는 솔루션이야.
     <개인정보처리방침> 진단은 무조건 아래 <규칙>만으로 진단해야 해.
@@ -41,18 +44,18 @@ def Answer_Template(policy, instruction):
     (Top-p = 0.1)
     
     <규칙>
-    {Translator(instruction)}
+    {T_Instruction}
     
     <개인정보처리방침>
-    {Translator(policy)}
+    {T_Policy}
     
     <주의사항>
     [예시4]처럼 위반 문장은 개행("\r\n")까지 그대로 포함해서 추출해줘! 개행이 [예시4]처럼 연속으로 붙을 수도 있어!
     [예시4]
     위반문장: 제 4조 개인정보처리목적\r\n\r\n\r\n이 개인정보처리목적은 잘 처리합니다.
     '''
-    print("들어간 규칙", instruction)
-    print("들어간 방침",policy)
+    print("들어간 규칙", T_Instruction)
+    print("들어간 방침",T_Policy)
     print("--------------구분선-----------------")
 
     return template
