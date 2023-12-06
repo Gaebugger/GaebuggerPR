@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
     "@emotion/react": "^11.11.1",
