@@ -5,5 +5,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface PdfService {
-    String createPdf(List<MultipartFile> files) throws IOException;
+    String createPdf(List<MultipartFile> files, String userName, String companyName) throws IOException;
 }

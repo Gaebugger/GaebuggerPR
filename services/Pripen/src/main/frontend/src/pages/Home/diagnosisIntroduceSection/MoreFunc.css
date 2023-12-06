@@ -1,0 +1,21 @@
+/* 초기 상태 - 보이지 않음 */
+.box-hidden {
+    opacity: 0;
+    transform: translateY(20px); /* 조정 가능 */
+}
+
+/* fadeIn 클래스가 적용될 때 애니메이션 효과 */
+.fadeIn {
+    animation: fadeInAnimation 1s ease-in-out forwards;
+}
+
+@keyframes fadeInAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* 조정 가능 */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

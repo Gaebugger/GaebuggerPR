@@ -1,0 +1,8 @@
+.serviceIntroduction:hover, .teamIntroduction:hover {
+    color: black !important; 
+    cursor: pointer;
+}   
+
+.Introduce-Section {
+    margin: 100px 200px 200px 200px;
+}

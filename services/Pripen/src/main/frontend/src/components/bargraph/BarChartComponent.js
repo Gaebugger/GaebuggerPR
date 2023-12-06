@@ -2,7 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import { RadioGroup, FormControlLabel, Radio, FormControl, Typography } from '@mui/material';
 import '../../assets/fonts/fonts.css';
-const BarChartComponent = ({ captureCanvas, data }) => {
+import { useCanvas } from '../../pages/Start/CanvasProvider';
+const BarChartComponent = ({ data }) => {
+    const {captureCanvas} = useCanvas();
     const [isVisible, setIsVisible] = useState(false); // 기본적으로는 보이지 않게 설정
     const chartRef = useRef(null);
     const [selectedValue, setSelectedValue] = useState('allType');

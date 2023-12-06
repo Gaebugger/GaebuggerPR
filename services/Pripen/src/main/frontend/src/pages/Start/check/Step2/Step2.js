@@ -4,7 +4,6 @@ import { Box, Typography, Divider, Container,Paper, Button  } from '@mui/materia
 import CustomizedSteppers from '../../../../components/StepIndicator/StepIndicator';
 import {styled} from '@mui/material/styles';
 import axios from 'axios';
-import '../../../../assets/fonts/fonts.css';
 import './Step2.css';
 import axiosInstance from '../../../../api/axiosInstance';
 function Step2({ nextStep, prevStep, setCheckedItems, checkedItems, setProcessId,infoObject,file  }) {
@@ -101,6 +100,7 @@ function Step2({ nextStep, prevStep, setCheckedItems, checkedItems, setProcessId
             infoData: infoObject
         }));
     
+                                            // https://backapi.pri-pen.com/api/download
         try {
             const response = await axios.post('http://localhost:8080/api/start', formData);
             //const response = await axios.post('https://backapi.pri-pen.com/api/start', formData);

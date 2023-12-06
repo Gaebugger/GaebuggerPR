@@ -6,8 +6,15 @@ build/
 !**/src/test/**/build/
 
 
+### Utility ###
+fonts/
+ubuntu@ec2-13-125-172-236.ap-northeast-2.compute.amazonaws.com/
+TemporaryStorage/
+
+
 ### API KEY###
 services/SolutionModelApi/config.py
+
 
 ### db info ###
 services/Pripen/src/main/resources/application.properties
@@ -15,8 +22,6 @@ services/Pripen/src/main/resources/application.properties
 
 ### FRONT API URL ###
 services/Pripen/src/main/frontend/.env
-
-
 
 
 ### STS ###
