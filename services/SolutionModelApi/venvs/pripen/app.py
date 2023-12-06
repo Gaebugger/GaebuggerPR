@@ -69,13 +69,6 @@ def process_text(request: ProcessTextRequest):
     final_answer_text = omission_text + answer_text
     print(final_answer_text)
 
-    # <최종 출력사항>
-    if (omission_text == ""):
-        omission_text = "없음"
-    omission_text = "*<기재항목 누락 관련 사항>*\n" + omission_text + "\n\n"
-    final_answer_text = omission_text + answer_text
-    print(final_answer_text)
-
     # 벡터DB에 재진단 데이터 삽입
     DB_Insert = VectorDB_Frame(final_answer_text)
     if(DB_Insert == True):
