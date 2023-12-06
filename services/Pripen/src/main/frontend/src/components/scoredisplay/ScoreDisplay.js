@@ -1,7 +1,7 @@
 import React,{useState, useEffect,useRef} from 'react';
 import { Box, Typography, Button } from '@mui/material';
 
-const ScoreDisplay = ({ data}) => {
+const ScoreDisplay = ({ data, setIsDisplayed}) => {
     const [displayedScore, setDisplayedScore] = useState(0);
     const [showComment, setShowComment] = useState(false); // 추가 커멘트 표시 여부 상태
     const [isVisible, setIsVisible] = useState(false);
@@ -46,6 +46,7 @@ const ScoreDisplay = ({ data}) => {
                     if (newScore >= maxScore) {
                         clearInterval(interval);
                         setShowComment(true);
+                        setIsDisplayed(prevState => ({ ...prevState, score: true }));
                         return maxScore;
                     }
                     return Math.round(newScore); // 반올림을 사용하여 가장 가까운 정수로 반올림

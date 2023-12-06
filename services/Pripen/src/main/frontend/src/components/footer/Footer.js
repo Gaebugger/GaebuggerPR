@@ -3,7 +3,7 @@ import "./Footer.css";
 
 const Footer = () => {
   return (
-    <div className="footer">
+    <div className="footer" style={{bottom:0}}>
       <b className="b">
         <p className="p">(주)개버거</p>
         <p className="p">&nbsp;</p>

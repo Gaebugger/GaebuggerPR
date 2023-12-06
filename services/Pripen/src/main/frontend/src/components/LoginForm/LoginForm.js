@@ -22,8 +22,8 @@ const LoginForm = () => {
         return response.data;
     }
 
-    const handleLogin = async () => {
-
+    const handleLogin = async (event) => {
+        event.preventDefault();
         // const csrfToken = await getCsrfToken();
         // const headers = {
         //     'X-CSRF-TOKEN': csrfToken
@@ -49,116 +49,131 @@ const LoginForm = () => {
             if (response.status === 200) {
                 login(); //` AuthContext의 login 함수를 호출하여 쿠키와 상태를 업데이트합니다.
                 navigate('/'); // 홈페이지로 이동
-            } else {
-                setErrorMessage("해당 정보를 찾을 수 없습니다.");
-                return;
-            }
+            } 
         } catch (error) {
-            setErrorMessage("서버와의 연결이 불안정합니다.");
+            if (error.response) {
+                // 백엔드에서 보낸 HTTP 상태 코드에 따른 오류 처리
+                const status = error.response.status;
+                switch (status) {
+                    case 401: // 인증 실패
+                        setErrorMessage("이메일 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요. ");
+                        break;
+                    case 500: // 서버 내부 오류
+                        setErrorMessage("서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+                        break;
+                    // 필요한 경우 다른 상태 코드에 대한 처리 추가
+                    default:
+                        setErrorMessage("오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+                        break;
+                }
+            } else {
+                // 네트워크 오류나 기타 오류 처리
+                setErrorMessage("서버와의 연결이 불안정합니다.");
+            }
             return;
-            // 네트워크 오류나 서버 에러 처리
         }
     };
 
 
     return (
-        <Box
-            sx={{
-                width: '300px',
-                padding: '40px',
-                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                borderRadius: '10px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '30px'
-            }}
-        >
-            <Typography variant="h5" component="div" fontFamily="NotoSansKR-Bold">
-                로그인
-            </Typography>
-
-            <TextField
-                label="이메일"
-                variant="outlined"
-                size="small"
-                fontFamily="NotoSansKR-Regular"
-                fullWidth
-                placeholder="nickname@company.com"
-                onChange={(e) => setEmail(e.target.value)}
-                sx={{ marginBottom: '5px' }}
-            />
-
-            <TextField
-                label="비밀번호"
-                variant="outlined"
-                size="small"
-                fontFamily="NotoSansKR-Regular"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                fullWidth
-            />
-
-            <Typography
-                color="error"
-                style={{
-                    height: '20px',
-                    visibility: errorMessage ? 'visible' : 'hidden'
-                }}
-            >
-                {errorMessage}
-            </Typography>
-
-            <Button
-                variant="contained"
-                color="primary"
-                fontFamily="NotoSansKR-Bold"
-                fullWidth
-                onClick={handleLogin}
-                >
-                로그인
-            </Button>
-
+        <form onSubmit={handleLogin}>
             <Box
                 sx={{
+                    width: '300px',
+                    padding: '40px',
+                    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '10px',
                     display: 'flex',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    marginTop: '20px'
+                    flexDirection: 'column',
+                    gap: '30px'
                 }}
             >
-                <MuiLink
-                    component={RouterLink}
-                    to="/signup"
-                    color="primary"
-                    fontFamily="NotoSansKR-SemiBold"
-                    sx={{
-                        textDecoration:"none",
-                        '&:hover': {
-                            fontWeight: 'bold',     // 폰트 두께 변경
-                            color: 'secondary.main' // hover 시 색상 변경 (예: secondary 색상 사용)
-                        }
+                <Typography variant="h5" component="div" fontFamily="NotoSansKR-Bold">
+                    로그인
+                </Typography>
+
+                <TextField
+                    label="이메일"
+                    variant="outlined"
+                    size="small"
+                    fontFamily="NotoSansKR-Regular"
+                    fullWidth
+                    placeholder="nickname@company.com"
+                    onChange={(e) => setEmail(e.target.value)}
+                    sx={{ marginBottom: '5px' }}
+                />
+
+                <TextField
+                    label="비밀번호"
+                    variant="outlined"
+                    size="small"
+                    fontFamily="NotoSansKR-Regular"
+                    type="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    fullWidth
+                />
+
+                <Typography
+                    color="error"
+                    style={{
+                        height: '20px',
+                        visibility: errorMessage ? 'visible' : 'hidden'
                     }}
                 >
-                    회원가입
-                </MuiLink>
-                |
-                <MuiLink
-                    component={RouterLink}
-                    to="/findpass"
+                    {errorMessage}
+                </Typography>
+                <Button
+                    type="submit"
+                    variant="contained"
                     color="primary"
-                    fontFamily="NotoSansKR-SemiBold"
+                    fontFamily="NotoSansKR-Bold"
+                    fullWidth
+                    >
+                    로그인
+                </Button>
+
+                <Box
                     sx={{
-                        textDecoration:"none",
-                        '&:hover': {
-                            fontWeight: 'bold',     // 폰트 두께 변경
-                            color: 'secondary.main' // hover 시 색상 변경 (예: secondary 색상 사용)
-                        }
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: '10px',
+                        marginTop: '20px'
                     }}
                 >
-                    비밀번호 찾기
-                </MuiLink>
+                    <MuiLink
+                        component={RouterLink}
+                        to="/signup"
+                        color="primary"
+                        fontFamily="NotoSansKR-SemiBold"
+                        sx={{
+                            textDecoration:"none",
+                            '&:hover': {
+                                fontWeight: 'bold',     // 폰트 두께 변경
+                                color: 'secondary.main' // hover 시 색상 변경 (예: secondary 색상 사용)
+                            }
+                        }}
+                    >
+                        회원가입
+                    </MuiLink>
+                    |
+                    <MuiLink
+                        component={RouterLink}
+                        to="/findpass"
+                        color="primary"
+                        fontFamily="NotoSansKR-SemiBold"
+                        sx={{
+                            textDecoration:"none",
+                            '&:hover': {
+                                fontWeight: 'bold',     // 폰트 두께 변경
+                                color: 'secondary.main' // hover 시 색상 변경 (예: secondary 색상 사용)
+                            }
+                        }}
+                    >
+                        비밀번호 찾기
+                    </MuiLink>
+                </Box>
             </Box>
-        </Box>
+        </form>
     );
 }
 

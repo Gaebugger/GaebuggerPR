@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Typography, Box, ToggleButtonGroup, ToggleButton, Paper, Divider } from '@mui/material';
 import "../../assets/fonts/fonts.css";
 import { makeStyles } from '@mui/styles';
 import BookIcon from '@mui/icons-material/Book';
 import CustomTooltip from './CustomToolTip';
+import { useCanvas } from '../../pages/Start/CanvasProvider';
 
 const NonConformityCheck = ({ data, omissionData }) => {
   const [selectedViolations, setSelectedViolations] = useState(['법률 위반','법률 위반 위험','작성지침 미준수']);
   const contentPieces = [];
+  const { captureCanvas} = useCanvas();
   const getMissingIssue = () => {
     const missingIssues = data.issues.filter(issue => issue.startIndex === -999 && selectedViolations.includes(issue.type));
 
@@ -52,8 +54,6 @@ const NonConformityCheck = ({ data, omissionData }) => {
 
   
   const getOmissionParagraph = () => {
-
-
     return (
       <div className="omissionParagraph" style={{ border: "2px solid black",display:"flex", justifyContent:"center" ,flexDirection:"column", alignContent:"center", alignItems:"center", marginBottom:"30px"}}>
         <h2 style={{fontFamily:"NotosansKR-SemiBold"}}>누락된 항목</h2>
@@ -66,54 +66,27 @@ const NonConformityCheck = ({ data, omissionData }) => {
     </div>
     );
   };
-    // 각 타입별 설명 문자열 생성
-    const getIssueDescription = (issueTypes) => {
-      // 먼저 각 타입별로 개수를 계산
-      const issueCounts = issueTypes.reduce((acc, type) => {
-        acc[type] = (acc[type] || 0) + 1;
-        return acc;
-      }, {});
 
-      // 개수가 0이 아닌 타입들만 문자열로 만든다
-      return Object.entries(issueCounts)
-        .filter(([type, count]) => count > 0)
-        .map(([type, count]) => `${type}: ${count}건`)
-        .join('\n'); // 줄바꿈 문자로 각 타입을 구분
-    };
+  const createTooltipTitle = (issueCount, issueTypes) => {
+    const issueDescriptions = Object.entries(issueTypes)
+      .filter(([type,count]) => count >0)
+      .map(([type,count]) => `${type} ${count}건`);
 
-    // 데이터 처리 과정에서 각 startIndex에 대한 issueTypes를 업데이트한다.
-    // 이 예시에서는 각 type의 개수를 저장하는 배열을 가정합니다.
-    // issueTypesByStartIndex[issue.startIndex] = ['법률 위반', '법률 위반 위험', ...];
-
-    const getUniqueIssues = (issues) => {
-      const uniqueIssues = new Set();
-      issues.forEach(issue => {
-        // 이 예제에서는 issue의 고유 식별자로 issue.id를 사용합니다.
-        // 실제 구현에서는 이슈를 고유하게 식별할 수 있는 속성을 사용해야 합니다.
-        uniqueIssues.add(issue.id);
-      });
-      return Array.from(uniqueIssues);
-    };
-
-    const createTooltipTitle = (issueCount, issueTypes) => {
-      const issueDescriptions = Object.entries(issueTypes)
-        .filter(([type,count]) => count >0)
-        .map(([type,count]) => `${type} ${count}건`);
-
-          // issueDescriptions 배열을 개행 문자(\n)로 결합
-      const descriptionText = issueDescriptions.join('\n');
-      return `위 문장은 표시된 위반 유형 외 ${issueCount-1}건의 위반 사항을 가지고 있습니다.\n\n${descriptionText}`;
-    };
+        // issueDescriptions 배열을 개행 문자(\n)로 결합
+    const descriptionText = issueDescriptions.join('\n');
+    return `위 문장은 표시된 위반 유형 외 ${issueCount-1}건의 위반 사항을 가지고 있습니다.\n\n${descriptionText}`;
+  };
 
   const getHighlightedContent = () => {
     let lastIndex = 0;
-    const contentPieces = [];
     const displayedStartIndexes = new Set();
     const issueCountsByStartIndex = {};
     const issueTypesByStartIndex = {};
 
     // 이슈 처리 및 개수 카운트
     data.issues.forEach((issue) => {
+      console.log("my lastIndex is ");
+      console.log(lastIndex);
       if (selectedViolations.includes(issue.type)) {
         if (issue.startIndex === -999) {
           return; // 이미 처리된 issue
@@ -121,7 +94,7 @@ const NonConformityCheck = ({ data, omissionData }) => {
 
   
         const issueContent = data.content.slice(issue.startIndex, issue.endIndex + 1) +
-                            (data.content[issue.endIndex] === '\n' ? '\n' : '');
+                            (data.content[issue.endIndex+1] === '\n' ? '\n' : '');
   
         if (!displayedStartIndexes.has(issue.startIndex)) {
           // 중복되지 않은 경우, 내용을 표시
@@ -215,78 +188,95 @@ const NonConformityCheck = ({ data, omissionData }) => {
       default: return 'transparent';
     }
   };
-const useStyles = makeStyles({
-  lawViolation: {
-    fontFamily:"NotoSansKR-Regular",
-    backgroundColor: "transparent", // 예: 빨간색
-    '&.Mui-selected': {
-      fontFamily:"NotoSansKR-SemiBold",
-      borderBottom: "6px solid red",  // 밑줄 적용
-      paddingBottom: "5px"            // 밑줄과 텍스트 간의 간격
-    }
-  },
-  lawRisk: {
-    fontFamily:"NotoSansKR-Regular",
-    backgroundColor: "transparent", // 예: 노란색
-    '&.Mui-selected': {
+  const useStyles = makeStyles({
+    lawViolation: {
+      fontFamily:"NotoSansKR-Regular",
+      backgroundColor: "transparent", // 예: 빨간색
+      '&.Mui-selected': {
+        fontFamily:"NotoSansKR-SemiBold",
+        borderBottom: "6px solid red",  // 밑줄 적용
+        paddingBottom: "5px"            // 밑줄과 텍스트 간의 간격
+      }
+    },
+    lawRisk: {
+      fontFamily:"NotoSansKR-Regular",
+      backgroundColor: "transparent", // 예: 노란색
+      '&.Mui-selected': {
 
-      fontFamily:"NotoSansKR-SemiBold",
-      borderBottom: "6px solid orange",  // 밑줄 적용
-      paddingBottom: "5px"            // 밑줄과 텍스트 간의 간격
-    }
-  },
-  guidelineViolation: {
-    fontFamily:"NotoSansKR-Regular",
-    backgroundColor: "transparent", // 예: 자주색
-    '&.Mui-selected': {
-      fontFamily:"NotoSansKR-SemiBold",
-      borderBottom: "6px solid gold",  // 밑줄 적용
-      paddingBottom: "5px"            // 밑줄과 텍스트 간의 간격
-    }
-  },
-});
-const classes = useStyles();
-  return (
-    <Box mt={4} style={{display: "flex", flexDirection: "column", marginLeft:"20px",marginRight:"20px"}}>
-      <ToggleButtonGroup
-        value={selectedViolations}
-        onChange={(event, newValues) => setSelectedViolations(newValues)}
-        aria-label="issues"
-        style={{justifyContent:"flex-end"}}
-      > 
-        <ToggleButton 
-          value="법률 위반" 
-          aria-label="법률 위반" 
-          className={classes.lawViolation}
-        >
-          법률 위반
-        </ToggleButton>
-        <ToggleButton 
-          value="법률 위반 위험" 
-          aria-label="법률 위반 위험" 
-          className={classes.lawRisk}
-        >
-          법률 위반 위험
-        </ToggleButton>
-        <ToggleButton 
-          value="작성지침 미준수"
-          aria-label="작성지침 미준수"
-          className={classes.guidelineViolation}
-        >
-          작성지침 미준수
-        </ToggleButton>
-      </ToggleButtonGroup>
-      <Paper style={{maxHeight: '450px', overflowY: 'scroll', padding: '16px', border: "2px solid #d9d9d9",whiteSpace:"pre-line"}}>
-        {
-          omissionData && omissionData.length > 0 && getOmissionParagraph()
-        }
-        {getHighlightedContent().map((item, index) => (
-          <Typography key={index} variant="body1" display="inline" style={{fontFamily:"NotoSansKR-Regular"}}>{item}</Typography>
-        ))}
-        {getMissingIssue()}
-      </Paper>
-    </Box>
-  );
-};
+        fontFamily:"NotoSansKR-SemiBold",
+        borderBottom: "6px solid orange",  // 밑줄 적용
+        paddingBottom: "5px"            // 밑줄과 텍스트 간의 간격
+      }
+    },
+    guidelineViolation: {
+      fontFamily:"NotoSansKR-Regular",
+      backgroundColor: "transparent", // 예: 자주색
+      '&.Mui-selected': {
+        fontFamily:"NotoSansKR-SemiBold",
+        borderBottom: "6px solid gold",  // 밑줄 적용
+        paddingBottom: "5px"            // 밑줄과 텍스트 간의 간격
+      }
+    },
+  });
+
+  const [captureStyle, setCaptureStyle] = useState({});
+
+  useEffect(() => {
+    // 스타일 변경
+    setCaptureStyle({ overflowY: 'none', border: 'none',maxHeight:'none' });
+  
+    // 스타일 변경 후 적절한 시간을 기다림
+    setTimeout(() => {
+      captureCanvas('section4', 4);
+  
+      // 예상되는 캡처 완료 시간 후에 스타일 복원
+      setTimeout(() => {  
+        setCaptureStyle({});
+      },250); // 예상되는 캡처 시간 설정
+    }, 200);
+  }, []);
+  const classes = useStyles();
+    return (
+      <Box id="section4" mt={4} style={{display: "flex", flexDirection: "column", marginLeft:"20px",marginRight:"20px"}}>
+        <ToggleButtonGroup
+          value={selectedViolations}
+          onChange={(event, newValues) => setSelectedViolations(newValues)}
+          aria-label="issues"
+          style={{justifyContent:"flex-end"}}
+        > 
+          <ToggleButton 
+            value="법률 위반" 
+            aria-label="법률 위반" 
+            className={classes.lawViolation}
+          >
+            법률 위반
+          </ToggleButton>
+          <ToggleButton 
+            value="법률 위반 위험" 
+            aria-label="법률 위반 위험" 
+            className={classes.lawRisk}
+          >
+            법률 위반 위험
+          </ToggleButton>
+          <ToggleButton 
+            value="작성지침 미준수"
+            aria-label="작성지침 미준수"
+            className={classes.guidelineViolation}
+          >
+            작성지침 미준수
+          </ToggleButton>
+        </ToggleButtonGroup>
+        <Paper style={{maxHeight: '450px', overflowY: 'scroll', padding: '16px', border: "2px solid #d9d9d9",whiteSpace:"pre-line", ...captureStyle}}>
+          {
+            omissionData && omissionData.length > 0 && getOmissionParagraph()
+          }
+          {getHighlightedContent().map((item, index) => (
+            <Typography key={index} variant="body1" display="inline" style={{fontFamily:"NotoSansKR-Regular"}}>{item}</Typography>
+          ))}
+          {getMissingIssue()}
+        </Paper>
+      </Box>
+    );
+  };
 
 export default NonConformityCheck;

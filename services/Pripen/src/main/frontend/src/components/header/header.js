@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
-import '../../assets/fonts/fonts.css';
 import './header.css';
-import logoImage from '../../assets/images/pripen_logo.png';
+import logoImage from '../../assets/images/pripen_logo.svg';
 import {useAuth} from '../../contexts/AuthContext';
 import { Button } from '@mui/material';
 import { useEffect } from 'react';
@@ -13,12 +12,18 @@ const Header = ({ active }) => {
     const navigate = useNavigate();
     const CustomDropdown = ({ isOpen, items, onClose }) => {
         if (!isOpen) return null;
-
+        
         return (
             <div className="dropdown-menu" onMouseLeave={onClose}>
                 {items.map((item, idx) => (
-                    <Link key={idx} to={item.link} className="dropdown-item">
-                        {item.label}
+                    <Link 
+                        key={idx} 
+                        to={item.link}
+                        state={{label:item.label}}
+                        className="dropdown-item" 
+                        style={{fontFamily:'NotoSansKR-Regular', fontSize:'14px'}}
+                        >
+                            {item.label}
                     </Link>
                 ))}
             </div>
@@ -37,7 +42,7 @@ const Header = ({ active }) => {
             <div className="logo_menu">
                 <div className="logo">
                     <Link to="/">
-                        <img src={logoImage} alt="LOGO" style={{width:"130%", marginTop:"5px"}} />
+                        <img src={logoImage} alt="LOGO" style={{width:"130%", marginTop:"-10px"}} />
                     </Link>
                 </div>
             </div>
@@ -48,34 +53,27 @@ const Header = ({ active }) => {
                         onMouseEnter={() => setShowContactDropdown(true)}
                         onMouseLeave={() => setShowContactDropdown(false)}
                     >
-                        <Link to="/contact" className={active === "contact" ? "active-link" : ""}>주요 기능</Link>
-                        <CustomDropdown 
-                            isOpen={showContactDropdown}
-                            items={[
-                                { label: '파도는', link: '/contact/subpage1' },
-                                { label: 'contact us', link: '/contact/subpage2' }
-                            ]}
-                        />
+                        <Link to="/" className={active === "contact" ? "active-link" : ""}>주요 기능</Link>
                     </li>
                     <li 
                         onMouseEnter={() => setShowServicesDropdown(true)}
                         onMouseLeave={() => setShowServicesDropdown(false)}
                     >
-                        <Link to="/services" className={active === "services" ? "active-link" : ""}>사용 사례</Link>
+                        <Link to="/introduce" className={active === "introduce" ? "active-link" : ""}>회사 소개</Link>
                         <CustomDropdown 
                             isOpen={showServicesDropdown}
                             items={[
-                                { label: '개인정보 처리방침 진단', link: '/services/check' },
-                                { label: '하위 페이지 2', link: '/contact/subpage2' }
+                                { label: 'Pripen', link: '/introduce' },
+                                { label: 'Gaebugger', link: '/introduce' }
                             ]}
                         />
                     </li>
-                    <li>
+                    {/* <li>
                         <Link to="/guidelines" className={active === "guidelines" ? "active-link" : ""}>리소스</Link>
                     </li>
                     <li>
                         <Link to="/guidelines" className={active === "guidelines" ? "active-link" : ""}>사용 문의</Link>
-                    </li>
+                    </li> */}
                     <li>
                         <Button 
                             variant="outlined" 
@@ -105,8 +103,8 @@ const Header = ({ active }) => {
             {/* 로그인 상태에 따른 UI 변경 */}
             {isLoggedIn? (
                 <div className="authentication">
-                    <Link to="/mypage">마이 페이지</Link>
-                    <button onClick={handleLogout}>로그아웃</button>
+                    <Link to="/mypage" style={{marginRight:'40px'}}>마이 페이지</Link>
+                    <Link to="/" onClick={handleLogout}>로그아웃</Link>
                 </div>
             ) : (
                 <div className="authentication">

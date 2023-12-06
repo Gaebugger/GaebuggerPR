@@ -83,7 +83,7 @@ function CheckEvaluate() {
             currentStep = <Step4 processId={processId} nextStep={nextStep} responseData={apiResponse} infoObject={infoObject}/>;
             break;
         case 5:
-            currentStep = <Guideline_detail processId={processId} prevStep={prevStep} responseData={apiResponse} />;
+            currentStep = <Guideline_detail processId={processId} prevStep={prevStep} responseData={apiResponse} infoObject={infoObject} />;
     
         default:
             break;
@@ -92,7 +92,6 @@ function CheckEvaluate() {
 
     return (
         <div className="jiji">
-            
             <Helmet>
                 <title>개인정보 처리방침 진단</title>
             </Helmet>

@@ -1,33 +1,32 @@
 package com.example.backend.controller;
 
 
+import com.example.backend.dto.CompanyDTO;
 import com.example.backend.dto.ResponseMessage;
 import com.example.backend.dto.UserDto;
-import com.example.backend.model.User;
+import com.example.backend.model.Authentication.Company;
+import com.example.backend.model.Authentication.User;
 import com.example.backend.model.redis.RefreshToken;
 import com.example.backend.repository.redis.RefreshTokenRepository;
-import com.example.backend.service.RefreshTokenService;
-import com.example.backend.service.UserService;
+import com.example.backend.service.Authentication.Login.*;
+import com.example.backend.service.Authentication.Signup.CompanyService;
+import com.example.backend.service.Authentication.Signup.EmailPostService;
+import com.example.backend.service.Authentication.Signup.EmailVerificationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.example.backend.service.JWTService;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/userAuthentication")
@@ -36,27 +35,42 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final AuthenticationService authenticationService;
     private final JWTService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final CookieService cookieService;
+    private final AuthenticationManager authenticationManager;
 
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final EmailPostService emailPostService;
+    private final EmailVerificationService emailVerificationService;
+    private final CompanyService companyService;
     public UserController(
             UserService userService,
             PasswordEncoder passwordEncoder,
             ModelMapper modelMapper,
+            AuthenticationService authenticationService,
             JWTService jwtService,
             AuthenticationManager authenticationManager,
+            CookieService cookieService,
             RefreshTokenService refreshTokenService,
-            RefreshTokenRepository refreshTokenRepository) {
+            RefreshTokenRepository refreshTokenRepository,
+            EmailPostService emailPostService,
+            EmailVerificationService emailVerificationService,
+            CompanyService companyService) {
 
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
+        this.authenticationService = authenticationService;
         this.jwtService = jwtService;
+        this.cookieService = cookieService;
         this.authenticationManager = authenticationManager;
         this.refreshTokenService = refreshTokenService;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.emailPostService = emailPostService;
+        this.emailVerificationService = emailVerificationService;
+        this.companyService = companyService;
     }
 
     @CrossOrigin(origins = {"https://www.pri-pen.com"},allowCredentials = "true")
@@ -64,45 +78,25 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody User loginUser, HttpServletResponse response) {
         try {
-            // Spring Security 인증 과정 실행
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPasswordHash())
-            );
-            System.out.println("my login info is:");
-            System.out.println(loginUser);
-            // 인증된 사용자 세션에 저장
+            Authentication authentication = authenticationService.authenticateUser(loginUser);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // JWT 토큰 생성
             String accessToken = jwtService.generateJWT(loginUser.getEmail());
-            // refresh token 객체 생성
             RefreshToken refreshTokenObject = refreshTokenService.createRefreshToken(loginUser.getEmail());
-            // Refresh Token을 Redis에 저장하는 로직 추가
-            refreshTokenService.saveRefreshToken(refreshTokenObject);
 
-            // Access Token 쿠키 설정
-            Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-            accessTokenCookie.setHttpOnly(true);
-            accessTokenCookie.setSecure(true); // HTTPS를 사용하는 경우에만 true로 설정
-            accessTokenCookie.setPath("/"); // 쿠키를 전송할 요청 경로
-            accessTokenCookie.setMaxAge((int) jwtService.getAccessTokenValidityInSeconds()); // 쿠키 만료 시간을 설정
-            response.addCookie(accessTokenCookie);
+            cookieService.addCookie(response, "accessToken", accessToken, (int) jwtService.getAccessTokenValidityInSeconds());
+            cookieService.addCookie(response, "refreshToken", refreshTokenObject.getToken(), (int) refreshTokenService.getRefreshTokenValidityInSeconds());
 
-            // Refresh Token 쿠키 설정
-            Cookie refreshTokenCookie = new Cookie("refreshToken", refreshTokenObject.getToken());
-            refreshTokenCookie.setHttpOnly(true);
-            refreshTokenCookie.setSecure(true); // HTTPS를 사용하는 경우에만 true로 설정
-            refreshTokenCookie.setPath("/");
-            refreshTokenCookie.setMaxAge((int) refreshTokenService.getRefreshTokenValidityInSeconds()); // 쿠키 만료 시간을 설정
-            response.addCookie(refreshTokenCookie);
-
-            // 응답 바디 설정
-            Map<String, String> responseBody = new HashMap<>();
-            responseBody.put("status", "success");
-
-            return ResponseEntity.ok(responseBody); // JWT 응답으로 전송
+            return ResponseEntity.ok(Collections.singletonMap("status", "success"));
+        } catch (BadCredentialsException e) {
+            // BadCredentialsException에 대한 구체적인 처리
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Invalid credentials");
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Authentication failed");
+            // 기타 AuthenticationException에 대한 처리
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Authentication failed");
+        } catch (RuntimeException e) {
+            // 타임아웃 등의 런타임 예외 처리
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
     }
 
@@ -159,8 +153,6 @@ public class UserController {
         System.out.println(user.getPasswordHash());
         System.out.println("user's info is:");
         System.out.println(user);
-        // CompanyId를 1로 고정
-        user.setCompanyId(1L);
 
         userService.save(user);
 
@@ -178,14 +170,91 @@ public class UserController {
             Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findByToken(refreshToken);
             refreshTokenOptional.ifPresent(refreshTokenRepository::delete);
 
-            // 쿠키를 만료시키기 위한 'Set-Cookie' 헤더를 추가합니다.
+            // 쿠키를 만료시키기 위한 'Set-Cookie' 헤더를 추가
             Cookie cookie = new Cookie("refreshToken", null); // refreshToken 쿠키를 null로 설정
             cookie.setPath("/");
             cookie.setHttpOnly(true);
-            cookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료되게 합니다.
+            cookie.setMaxAge(0); // 쿠키의 만료 시간을 0으로 설정하여 즉시 만료
             response.addCookie(cookie);
         });
         System.out.println("delete your token from redis");
         return ResponseEntity.ok().build(); // 성공적인 응답
+    }
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"} )
+    @GetMapping("/check-email")
+    public ResponseEntity<?> checkEmail(@RequestParam String email){
+        boolean isAvailable = !userService.existsByEmail(email);
+
+        return ResponseEntity.ok().body(Map.of("isAvailable", isAvailable));
+    }
+
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com","http://localhost:3000"})
+    @PostMapping("/email-post")
+    public ResponseEntity<?> emailPost(@RequestBody Map<String, String> requestData){
+        String email = requestData.get("email");
+        try {
+            String verificationCode = emailPostService.generateVerificationCode();
+            System.out.println("verfication code is! " + verificationCode);
+            emailPostService.doSendEmail(email,verificationCode);
+            return ResponseEntity.ok().body("이메일 전송 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 전송 실패");
+        }
+        //파라미터 입력받은 email에 템플릿 인증코드 전송.
+    }
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"})
+    @PostMapping("/email-validity")
+    public ResponseEntity<?> emailValidity(@RequestBody Map<String, String> requestBody){
+        try {
+            String code = requestBody.get("code");  // 여기 고쳐야함.
+            String email = requestBody.get("email");
+            System.out.println("your code is " + code);
+            System.out.println("your email is " + email);
+
+            if (email == null || email.trim().isEmpty() || code == null || code.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("이메일 or code 없음");
+            }
+
+            boolean isValid = emailVerificationService.verifyEmailWithCode(email, code);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("isValid", isValid);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 내부 서버 오류 처리
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
+        }
+    }
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com", "http://localhost:3000"})
+    @GetMapping("/company-search")
+    public ResponseEntity<List<Company>> companyList(@RequestParam String query) {
+        try {
+
+            System.out.println("input is : " + query);
+            List<Company> companies = companyService.searchCompanies(query);
+            return ResponseEntity.ok(companies);
+        } catch (Exception e) {
+            // 적절한 예외 처리 로직 구현
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"})
+    @PostMapping("/company-create")
+    public ResponseEntity<?> companyCreate(@RequestBody CompanyDTO companyDTO){
+        Company newCompany = new Company();
+        newCompany.setCompanyName(companyDTO.getCompanyName());
+        newCompany.setCompanyAddress(companyDTO.getCompanyAddress());
+        newCompany.setCompanyPostCode(companyDTO.getCompanyPostCode());
+        newCompany.setCompanyExtraAddress(companyDTO.getCompanyExtraAddress());
+        newCompany.setCompanyBusinessRegistration(companyDTO.getCompanyBusinessRegistration());
+
+        Company createdCompany = companyService.createCompany(newCompany);
+        return ResponseEntity.ok(createdCompany);
     }
 }

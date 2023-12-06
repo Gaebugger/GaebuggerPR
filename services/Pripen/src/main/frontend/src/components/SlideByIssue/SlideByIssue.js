@@ -262,8 +262,13 @@ const SlideByIssue = ({ original, paragraphs, issues,style,selectedButtonIssue,o
             const containerElement = document.querySelector('.paragraph-section');
             if (spanElement && currentIssueId !== lastClickedIssueId) {
                 // 윈도우 스크롤입니다.
-                const targetSlide = (selectedButtonIssue.issue_id - 1) - omissionIssuesCount;
-                sliderRef.current.slickGoTo(targetSlide);
+                let slideIdx = (selectedButtonIssue.issue_id - 1) - omissionIssuesCount;
+                if(slideIdx<0){
+                    slideIdx = (selectedButtonIssue.issue_id - 1);
+                };
+                const targetSlide = slideIdx;
+                
+                sliderRef.current.slickGoTo(targetSlide);   
     
                 var element = document.querySelector('.slick-list'); // 요소를 선택
                 var rect = element.getBoundingClientRect();

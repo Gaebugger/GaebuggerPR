@@ -6,6 +6,8 @@ import './StartIndex.css';
 import CheckEvaluate from './check/CheckEvaluate';
 import { Routes, Route } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import { CanvasProvider } from './CanvasProvider';
+import FuncIntro from './FuncIntro';
 
 function StartIndex() {
     return (
@@ -14,15 +16,14 @@ function StartIndex() {
             <main className='startIndex-content'>
                 <Routes>
                     <Route path="/" element={
-                        <div>
-                            <p>안녕안녕</p>
-                            <Link to="/start/check">
-                                <Button>시작하기</Button>
-                            </Link>
-                        </div>
+                        <FuncIntro />
                         }
                     />
-                    <Route path="/check" element={<CheckEvaluate />} />
+                    <Route path="/check" element={
+                        <CanvasProvider>
+                            <CheckEvaluate />
+                        </CanvasProvider>
+                    } />
                 </Routes>
             </main>
             <Footer />

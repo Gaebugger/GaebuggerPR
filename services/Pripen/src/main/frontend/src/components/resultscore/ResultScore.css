@@ -1,0 +1,6 @@
+.resultScore > *{
+    margin: 70px;
+}
+.resultScore .ScoreDisplay{
+    margin-right: 100px;
+}

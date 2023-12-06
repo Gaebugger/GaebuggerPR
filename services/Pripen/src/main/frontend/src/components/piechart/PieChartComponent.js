@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { arc } from 'd3-shape';
 import { Pie } from '@nivo/pie';
 import {  Typography } from '@mui/material';
 import './PieChartComponent.css';
-const PieChartComponent = ({ pieData, total }) => {
+const PieChartComponent = ({ pieData, total,setIsDisplayed }) => {
     const [isVisible, setIsVisible] = useState(false);
     const containerRef = useRef(null);
 
@@ -52,6 +51,7 @@ const PieChartComponent = ({ pieData, total }) => {
                 if (entry.isIntersecting) {
                     setTimeout(() => {
                         setIsVisible(true);
+                        setIsDisplayed(prevState => ({ ...prevState, pie: true }));
                     }, 500);  
                 }
             },
