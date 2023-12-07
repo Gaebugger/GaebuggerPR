@@ -60,7 +60,8 @@ export const CanvasProvider = ({ children }) => {
       responseType: 'blob',  // 중요: PDF 파일을 Blob 형태로 받기 위함
       headers: {
         'Content-Type': 'multipart/form-data'
-      }
+      },
+      withCredentials: true  // 쿠키를 포함시키기 위해 true로 설정
     })
     .then(response => {
       // Blob 데이터를 URL로 변환

@@ -89,7 +89,6 @@ function CheckEvaluate() {
             break;
         
     }
-
     return (
         <div className="jiji">
             <Helmet>

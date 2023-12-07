@@ -1,11 +1,13 @@
 package com.example.backend.service.Authentication.Login;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -17,19 +19,20 @@ public class JWTService {
     // SecretKey를 application.properties에서 주입
     @Value("${jwt.secretKey}")
     private String secretKey;
-
+    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     // Token의 유효시간을 설정
     private final long accessTokenInMilliSeconds = 3600000L;
 
     public String generateJWT(String email) {
-        byte[] apiKeySecretBytes = secretKey.getBytes(StandardCharsets.UTF_8);
-        Key signingKey = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS512.getJcaName());
+        //byte[] apiKeySecretBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+        //Key signingKey = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS512.getJcaName());
 
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenInMilliSeconds))
-                .signWith(SignatureAlgorithm.HS512, signingKey)
+                .signWith(key, SignatureAlgorithm.HS512)
+                //.signWith(SignatureAlgorithm.HS512, signingKey)
                 .compact();
     }
 
@@ -38,8 +41,10 @@ public class JWTService {
     }
     // 토큰 유효성 검사 메소드
     public boolean validateToken(String token) {
+        System.out.println("token is!");
+        System.out.println(token);
         try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(key).parseClaimsJws(token);
             return true;
         } catch (Exception ex) { // 또는 구체적인 예외 타입들을 명시
             logger.error("Token validation error: {}", ex.getMessage());
@@ -49,7 +54,7 @@ public class JWTService {
     // 토큰에서 사용자 이메일 추출 메소드
     public String getUserEmailFromJWT(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(secretKey)
+                .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();
