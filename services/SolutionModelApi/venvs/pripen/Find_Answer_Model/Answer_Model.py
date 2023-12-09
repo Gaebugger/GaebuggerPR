@@ -41,19 +41,19 @@ async def generate_concurrently(df):
                 llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "처리하는 개인정보의 항목":
-                llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
+                llm = OpenAI(temperature=0.3, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "만 14세 미만 아동의 개인정보 처리에 관한 사항":
-                llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
+                llm = OpenAI(temperature=0.3, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "개인정보의 제3자 제공에 관한 사항":
-                llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
+                llm = OpenAI(temperature=0.3, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "개인정보 처리업무의 위탁에 관한 사항":
                 llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "개인정보의 국외 이전에 관한 사항":
-                llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
+                llm = OpenAI(temperature=0.3, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "개인정보의 파기 절차 및 방법에 관한 사항":
                 llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
@@ -62,7 +62,7 @@ async def generate_concurrently(df):
                 llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "정보주체와 법정대리인의 권리·의무 및 행사방법에 관한 사항":
-                llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
+                llm = OpenAI(temperature=0.3, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "개인정보의 안전성 확보조치에 관한 사항":
                 llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
@@ -86,16 +86,16 @@ async def generate_concurrently(df):
                 llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "개인정보의 열람청구를 접수·처리하는 부서":
-                llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
+                llm = OpenAI(temperature=0.3, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "정보주체의 권익침해에 대한 구제방법":
-                llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
+                llm = OpenAI(temperature=0.3, top_p=0.2, model_name='gpt-4-1106-preview')
 
             case "영상정보처리기기 운영·관리에 관한 사항":
                 llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
 
             case "개인정보 처리방침의 변경에 관한 사항":
-                llm = OpenAI(temperature=0.05, top_p=0.3, model_name='gpt-4-1106-preview')
+                llm = OpenAI(temperature=0.3, top_p=0.3, model_name='gpt-4-1106-preview')
 
         task = async_generate(llm, df['matched_part'][i], df['instruction'][i], i)
         tasks.append(task)
