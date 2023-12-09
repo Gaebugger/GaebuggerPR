@@ -30,7 +30,7 @@ app = FastAPI()
 
 # Define your Pydantic models here
 class ProcessTextRequest(BaseModel):
-    process_Id: int
+    process_Id: str
     text: str
     user_input: List[int]  # 예를 들어, 정수 리스트로 가정
 

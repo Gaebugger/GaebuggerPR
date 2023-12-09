@@ -84,7 +84,6 @@ def Make_Issues(ans, issue_paragraph_id, text, df, original_index, issue_id_star
             startIndex = text.find(start)
         else:
             startIndex = text.find(i)
-
         endIndex = len(i) + startIndex - 1 # -1 하는 이유는 리스트 인덱스 구조가 다름 (Python -> JAVA)
         issue_startIndex.append(startIndex)
         issue_endIndex.append(endIndex)
