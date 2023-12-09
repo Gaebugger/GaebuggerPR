@@ -7,9 +7,8 @@ const TeamIntroduce = () => {
             id: 1,
             name: "이선민",
             role: [
-                "PM",
-                "기획 총괄",
-                "개인정보 리소스 제작"
+                "PM/기획총괄",
+                "개인정보 처리방침 진단 룰셋 제작",
             ],
             school: "성신여자대학교 정보보호학과",
             photo: "/assets/images/rnr/이선민.png"
@@ -18,7 +17,8 @@ const TeamIntroduce = () => {
             id: 2,
             name: "김윤서",
             role: [
-                "개인정보부"
+                "개인정보 처리방침 진단 룰셋 제작",
+                "프롬프트 연구"
             ],
             school: "고려대학교 세종캠퍼스 인공지능보안학과",
             photo: "/assets/images/rnr/김윤서.jpg"
@@ -27,7 +27,8 @@ const TeamIntroduce = () => {
             id: 3,
             name: "김재윤",
             role: [
-                "개인정보부"
+                "개인정보 처리방침 진단 룰셋 제작",
+                "처리방침 진단 기준 마련"
             ],
             school: "중앙대학교 산업보안학과",
             photo: "/assets/images/rnr/김재윤.jpg"
@@ -46,8 +47,8 @@ const TeamIntroduce = () => {
             id: 5,
             name: "송창욱",
             role: [
-                "LLM 개발",
-                "챗봇 개발"
+                "진단 기능 개발",
+                "챗봇 기능 개발"
             ],
             school: "중앙대학교 산업보안학과",
             photo: "/assets/images/rnr/송창욱.jpg"
@@ -56,7 +57,8 @@ const TeamIntroduce = () => {
             id: 6,
             name: "정민규",
             role: [
-                "챗봇 기능 개발"
+                "챗봇 기능 개발",
+                "Vector DB 구축"
             ],
             school: "선린인터넷고등학교 정보보호과",
             photo: "/assets/images/rnr/정민규.jpg"

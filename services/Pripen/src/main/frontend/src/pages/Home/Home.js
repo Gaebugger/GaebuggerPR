@@ -87,7 +87,7 @@ function Home() {
                     </div>
                 </div>
 
-                <div className="FAQ" style={{fontFamily:"NotoSansKR-Bold",fontSize:"50px", margin:'0 120px 0 120px'}}>
+                <div className="FAQ" style={{fontFamily:"NotoSansKR-Bold",fontSize:"50px", margin:'0 120px 200px 120px'}}>
                     <h4 style={{marginBottom: "5px"}}>자주 묻는 질문</h4>
                     <h4 style={{marginTop: "5px"}}>FAQ</h4>
                     <FaqContent />
