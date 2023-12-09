@@ -29,6 +29,7 @@ async def async_generate(llm, policy, instruction, index):
 # 결과를 인덱스와 함께 수집하고, 이를 다시 정렬
 # 각 기재항목에 맞는 하이퍼파라미터와 모델로 질의
 async def generate_concurrently(df):
+    tasks=[]
     for i in range(len(df)):
         match (df['part'][i]):
             case "제목 및 서문":
