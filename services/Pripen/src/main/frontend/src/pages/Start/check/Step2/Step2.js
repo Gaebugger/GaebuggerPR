@@ -100,9 +100,9 @@ function Step2({ nextStep, prevStep, setCheckedItems, checkedItems, setProcessId
             infoData: infoObject
         }));
     
-                                            // https://backapi.pri-pen.com/api/download
+                                            // http://localhost:8080/api/start
         try {
-            const response = await axios.post('http://localhost:8080/api/start', formData
+            const response = await axios.post('https://backapi.pri-pen.com/api/start', formData
             , {
                 withCredentials: true
             });

@@ -61,6 +61,16 @@ public class DataProcessingService {
                         "user_input", status.getCheckedItems(),
                         "text", status.getProcessedFileContent()
                 );
+
+                // requestBody 출력
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonString = objectMapper.writeValueAsString(requestBody);
+                    System.out.println(jsonString); // 또는 logger를 사용하여 로그로 출력
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 // ApiResponseDTO 형태로 응답
                 ApiResponseDTO responseDTO = webClient.post()
                         .uri("/process-text")

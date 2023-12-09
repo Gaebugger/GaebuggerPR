@@ -56,7 +56,7 @@ export const CanvasProvider = ({ children }) => {
 
     //https://backapi.pri-pen.com/api/download
     //http://localhost:8080/api/download
-    axios.post('http://localhost:8080/api/download', formData, {
+    axios.post('https://backapi.pri-pen.com/api/download', formData, {
       responseType: 'blob',  // 중요: PDF 파일을 Blob 형태로 받기 위함
       headers: {
         'Content-Type': 'multipart/form-data'

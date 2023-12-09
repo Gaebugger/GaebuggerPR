@@ -21,7 +21,7 @@ const InfoDiagItem = ({ imgSrc, title, description, index }) => {
                     <Col md={6} className="row-container" style={{ marginRight: '100px' }}>
                         <Image src={imgSrc} fluid />
                     </Col>
-                    <Col md={6} className="d-flex align-items-center" style={{ maxWidth:'600px', fontSize:'24px', fontFamily:'NotoSansKR-Regular', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <Col md={6} className="d-flex align-items-center" style={{ maxWidth:'500px', fontSize:'24px', fontFamily:'NotoSansKR-Regular', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                         <div>
                             <h2>{title}</h2>
                             <p style={{ wordWrap: 'break-word'}}>{description}</p>
@@ -30,7 +30,7 @@ const InfoDiagItem = ({ imgSrc, title, description, index }) => {
                 </>
             ) : (
                 <>
-                    <Col md={6} className="d-flex align-items-center" style={{ maxWidth:'600px',fontSize:'24px', fontFamily:'NotoSansKR-Regular', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <Col md={6} className="d-flex align-items-center" style={{ maxWidth:'500px',fontSize:'24px', fontFamily:'NotoSansKR-Regular', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                         <div>
                             <h2>{title}</h2>
                             <p style={{ wordWrap: 'break-word' }}>{description}</p>

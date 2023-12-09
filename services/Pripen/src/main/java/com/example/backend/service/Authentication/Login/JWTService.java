@@ -19,7 +19,7 @@ public class JWTService {
     // SecretKey를 application.properties에서 주입
     @Value("${jwt.secretKey}")
     private String secretKey;
-    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);  // 계속 오류 떠서 랜덤 생성해서 씀.
     // Token의 유효시간을 설정
     private final long accessTokenInMilliSeconds = 3600000L;
 

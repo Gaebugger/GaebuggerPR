@@ -80,10 +80,10 @@ public class UserController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String accessToken = jwtService.generateJWT(loginUser.getEmail());
-            RefreshToken refreshTokenObject = refreshTokenService.createRefreshToken(loginUser.getEmail());
+            //RefreshToken refreshTokenObject = refreshTokenService.createRefreshToken(loginUser.getEmail());
             System.out.println("accessToken is " + accessToken);
             cookieService.addCookie(response, "accessToken", accessToken, (int) jwtService.getAccessTokenValidityInSeconds());
-            cookieService.addCookie(response, "refreshToken", refreshTokenObject.getToken(), (int) refreshTokenService.getRefreshTokenValidityInSeconds());
+            //cookieService.addCookie(response, "refreshToken", refreshTokenObject.getToken(), (int) refreshTokenService.getRefreshTokenValidityInSeconds());
 
             return ResponseEntity.ok(Collections.singletonMap("status", "success"));
         } catch (BadCredentialsException e) {
