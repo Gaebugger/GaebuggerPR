@@ -1,7 +1,7 @@
 from .Make_Json import Make_Issues_Omission
 
 import pandas as pd
-df = pd.read_csv("./pripen/Rule-Set/test_instruction_1202.csv", encoding='cp949')
+df = pd.read_csv("./pripen/Rule-Set/test_instruction_1208.csv", encoding='cp949')
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 

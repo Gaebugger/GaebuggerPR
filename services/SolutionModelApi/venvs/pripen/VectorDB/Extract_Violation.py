@@ -23,7 +23,7 @@ def Extract_Violation(final_answer_text):
         violation_text += str(part) + "\n"
 
     # 파일 저장 경로 설정
-    file_path = './pripen/VectorDB/data/violation_text.txt'
+    file_path = './pripen/VectorDB/data/처리방침 진단 결과.txt'
 
     # 텍스트를 txt 파일로 저장하는 코드
     with open(file_path, 'w', encoding='utf-8') as file:
