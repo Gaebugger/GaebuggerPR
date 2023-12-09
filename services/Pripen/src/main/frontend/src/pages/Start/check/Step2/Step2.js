@@ -102,17 +102,35 @@ function Step2({ nextStep, prevStep, setCheckedItems, checkedItems, setProcessId
     
                                             // https://backapi.pri-pen.com/api/download
         try {
-            const response = await axios.post('http://localhost:8080/api/start', formData);
+            const response = await axios.post('http://localhost:8080/api/start', formData
+            , {
+                withCredentials: true
+            });
             //const response = await axios.post('https://backapi.pri-pen.com/api/start', formData);
             if (response.status === 200) {
                 console.log("my process id is:", response.data.processID);
                 setProcessId(response.data.processID);
                 nextStep();
             } else {
-                console.error("Failed to send data to the backend.");
+                console.error("Unexpected response status:", response.status);
             }
         } catch (error) {
-            console.error("An error occurred:", error);
+            if (error.response) {
+                // 서버가 상태 코드와 함께 응답을 반환했을 때
+                const statusCode = error.response.status;
+                const message = error.response.data.message || "An unknown error occurred";
+        
+                if (statusCode === 403) {
+                    // 인증 실패 처리: 로그인 페이지로 리다이렉트
+                    window.location.href = '/login';
+                } else {
+                    // 그 외 에러 처리: 에러 메시지 팝업
+                    alert(`Error (${statusCode}): ${message}`);
+                }
+            } else {
+                // 서버에서 응답이 없거나 요청이 전송되지 않았을 때
+                console.error("Network error or no response:", error);
+            }
         }
     };
     return (

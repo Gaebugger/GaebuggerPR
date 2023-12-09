@@ -21,8 +21,9 @@ function Step3({ nextStep, processId,dispatch,apiResponse }) {
         // SSE 연결 설정
         // 로컬:http://localhost:8080/api/check-response/${processId}
         //http://www.pri-pen.com/api/check-response/${processId}
-        const sse = new EventSource(`http://localhost:8080/api/check-response/${processId}`);
-        //const sse = new EventSource(`https://backapi.pri-pen.com/api/check-response/${processId}`);
+        const sse = new EventSource(`http://localhost:8080/api/check-response/${processId}`, { withCredentials: true });
+
+        //const sse = new EventSource(`https://backapi.pri-pen.com/api/check-response/${processId}`, { withCredentials: true });
 
         // data 이벤트를 통해 ApiResponseDTO 데이터 수신
         sse.addEventListener('data', event => {
@@ -45,7 +46,7 @@ function Step3({ nextStep, processId,dispatch,apiResponse }) {
                     sse.close();  // SSE 연결 종료
                 }
             } catch (error) {
-                // 여기서는 오류를 무시합니다. 오류가 발생한 경우는 "data" 이벤트에 대한 데이터를 파싱하려고 시도했을 때입니다.
+                // 여기서는 오류를 무시. 오류가 발생한 경우는 "data" 이벤트에 대한 데이터를 파싱하려고 시도했을 때
             }
         };
 

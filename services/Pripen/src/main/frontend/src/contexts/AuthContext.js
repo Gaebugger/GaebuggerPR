@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }) => {
     // AuthContext에 전달할 값
     const authContextValue = {
         isLoggedIn,
+        setIsLoggedIn,
         login,
         logout
 

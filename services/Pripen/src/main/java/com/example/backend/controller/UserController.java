@@ -73,8 +73,6 @@ public class UserController {
         this.companyService = companyService;
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com"},allowCredentials = "true")
-    //@CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody User loginUser, HttpServletResponse response) {
         try {
@@ -82,10 +80,10 @@ public class UserController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String accessToken = jwtService.generateJWT(loginUser.getEmail());
-            RefreshToken refreshTokenObject = refreshTokenService.createRefreshToken(loginUser.getEmail());
-
+            //RefreshToken refreshTokenObject = refreshTokenService.createRefreshToken(loginUser.getEmail());
+            System.out.println("accessToken is " + accessToken);
             cookieService.addCookie(response, "accessToken", accessToken, (int) jwtService.getAccessTokenValidityInSeconds());
-            cookieService.addCookie(response, "refreshToken", refreshTokenObject.getToken(), (int) refreshTokenService.getRefreshTokenValidityInSeconds());
+            //cookieService.addCookie(response, "refreshToken", refreshTokenObject.getToken(), (int) refreshTokenService.getRefreshTokenValidityInSeconds());
 
             return ResponseEntity.ok(Collections.singletonMap("status", "success"));
         } catch (BadCredentialsException e) {
@@ -100,7 +98,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com"})
     //@CrossOrigin(origins = "*")
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshAccessToken(HttpServletRequest request, HttpServletResponse response) {
@@ -133,7 +130,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com"})
     //@CrossOrigin(origins = "*")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody UserDto userDto) {
@@ -159,7 +155,6 @@ public class UserController {
         return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com"},allowCredentials = "true")
     @DeleteMapping("/logout")
     public ResponseEntity<?> logoutUser(HttpServletRequest request,HttpServletResponse response) {
         // 클라이언트로부터 받은 리프레시 토큰 쿠키 가져오기
@@ -181,7 +176,6 @@ public class UserController {
         return ResponseEntity.ok().build(); // 성공적인 응답
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"} )
     @GetMapping("/check-email")
     public ResponseEntity<?> checkEmail(@RequestParam String email){
         boolean isAvailable = !userService.existsByEmail(email);
@@ -190,7 +184,6 @@ public class UserController {
     }
 
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com","http://localhost:3000"})
     @PostMapping("/email-post")
     public ResponseEntity<?> emailPost(@RequestBody Map<String, String> requestData){
         String email = requestData.get("email");
@@ -205,7 +198,6 @@ public class UserController {
         //파라미터 입력받은 email에 템플릿 인증코드 전송.
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"})
     @PostMapping("/email-validity")
     public ResponseEntity<?> emailValidity(@RequestBody Map<String, String> requestBody){
         try {
@@ -230,7 +222,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com", "http://localhost:3000"})
     @GetMapping("/company-search")
     public ResponseEntity<List<Company>> companyList(@RequestParam String query) {
         try {
@@ -244,7 +235,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = {"https://www.pri-pen.com" , "http://localhost:3000"})
     @PostMapping("/company-create")
     public ResponseEntity<?> companyCreate(@RequestBody CompanyDTO companyDTO){
         Company newCompany = new Company();

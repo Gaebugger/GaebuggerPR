@@ -24,7 +24,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-@CrossOrigin(origins = {"https://www.pri-pen.com", "http://localhost:3000"})
 @RestController
 @RequestMapping("/api")
 public class ReceiveDataController {

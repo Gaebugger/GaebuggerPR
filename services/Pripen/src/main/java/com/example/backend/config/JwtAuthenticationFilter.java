@@ -30,16 +30,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // JWT 검증 로직
-        String jwt = extractJwtFromCookie(request);
-        if (jwt != null && jwtService.validateToken(jwt)) {
-            String userEmail = jwtService.getUserEmailFromJWT(jwt);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        String path = request.getRequestURI();
+        // 특정 경로에 대해서만 필터 적용
+        System.out.println("URI is " + path);
+        if ("/api/test-mock".equals(path)) {
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
+        else {
+            // JWT 검증 로직
+            String jwt = extractJwtFromCookie(request);
+            if (jwt != null && jwtService.validateToken(jwt)) {
+                String userEmail = jwtService.getUserEmailFromJWT(jwt);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                System.out.println("now register Context");
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.println("Context register is worked!!");
+            }
+            System.out.println("hmm vlidation process is end");
+            filterChain.doFilter(request, response);
+        }
     }
 
 

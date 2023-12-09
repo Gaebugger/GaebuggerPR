@@ -1,5 +1,6 @@
 package com.example.backend.config;
 
+import com.example.backend.filter.RequestLoggingFilter;
 import com.example.backend.service.Authentication.Login.JWTService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ public class SecurityConfig {
     private final UserDetailServiceImpl userDetailsService;
     private final JWTService jwtService;
 
+
     public SecurityConfig(UserDetailServiceImpl userDetailsService, JWTService jwtService) {
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
@@ -35,6 +37,7 @@ public class SecurityConfig {
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtService, userDetailsService);
     }
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -60,8 +63,11 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
-                        //.requestMatchers("/api/**").authenticated() // /api/** 경로는 인증 필요
+                        .requestMatchers("/api/check-response/**").permitAll()  // access denied 문제 해결
+                        .requestMatchers("/api/test-mock").permitAll()
+                        .requestMatchers("/api/**").authenticated() // /api/** 경로는 인증 필요
                         .anyRequest().permitAll()) // 그 외 모든 요청은 인증 없이 허용
+                //.addFilterBefore(new RequestLoggingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

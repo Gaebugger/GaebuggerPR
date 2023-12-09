@@ -92,37 +92,36 @@ public class DataProcessingService {
 
     @Transactional
     public CompletableFuture<Void> processData_test(UUID processId, SseEmitter emitter) throws Exception {
-        synchronized (lock){
-            ProcessingStatus status = statusMap.get(processId);
+        ProcessingStatus status = statusMap.get(processId);
 
-            status.setProcessingStarted(true);
-            System.out.println("processData is on!!!");
+        status.setProcessingStarted(true);
+        System.out.println("processData is on!!!");
 
-             // POST 요청을 사용하여 /mockData 엔드포인트를 호출
-            ApiResponseDTO responseDTO = webClient_test.post()
-                    .uri("/test-mock")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(processId.toString())
-                    .retrieve()
-                    .bodyToMono(ApiResponseDTO.class)
-                    .block();
+         // POST 요청을 사용하여 /mockData 엔드포인트를 호출
+        ApiResponseDTO responseDTO = webClient_test.post()
+                .uri("/test-mock")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(processId.toString())
+                .retrieve()
+                .bodyToMono(ApiResponseDTO.class)
+                .block();
 
-            try {
-                // 5초 (5000밀리초) 동안 대기
-                Thread.sleep(5000);
+        try {
+            // 5초 (5000밀리초) 동안 대기
+            Thread.sleep(5000);
 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            handleApiResponse(responseDTO, status, emitter);
-            emitter.send(SseEmitter.event().name("message").data("{\"completed\":true}"));
-            emitter.complete();
-
-            System.out.println("process done!!");
-            status.setProcessingComplete(true);
-            return CompletableFuture.completedFuture(null);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        handleApiResponse(responseDTO, status, emitter);
+        emitter.send(SseEmitter.event().name("message").data("{\"completed\":true}"));
+        emitter.complete();
+
+        System.out.println("process done!!");
+        status.setProcessingComplete(true);
+        return CompletableFuture.completedFuture(null);
     }
+
 
     private void handleApiResponse(ApiResponseDTO responseDTO, ProcessingStatus status, SseEmitter emitter) throws Exception {
         System.out.println("handleApiResponse is on!!");
