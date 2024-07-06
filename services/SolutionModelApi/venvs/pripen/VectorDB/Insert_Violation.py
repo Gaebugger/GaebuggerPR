@@ -2,24 +2,25 @@
 import os
 import openai
 from config import config
+from pinecone import Pinecone
 openai.api_key = os.getenv("OPENAI_API_KEY")
 pinecone_api_key = config.PINECONE_API_KEY
 print(pinecone_api_key)
 
+pc = Pinecone(api_key=pinecone_api_key)
+
 # 벡터 DB관련
 from llama_index import SimpleDirectoryReader
-import pinecone
+# import pinecone
 from llama_index import GPTVectorStoreIndex, StorageContext
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 
 def Insert_Violation():
     try:
-
-        pinecone.init(api_key=pinecone_api_key, environment="asia-northeast1-gcp")
-        pinecone_index = pinecone.Index("pdf-index")
+        pinecone_index = pc.Index("pdf-index")
 
         # 문서 로드
-        documents = SimpleDirectoryReader("./pripen/VectorDB/data").load_data()
+        documents = SimpleDirectoryReader("VectorDB/data").load_data()
 
         # Pinecone 벡터 스토어 생성, 네임 스페이스는 pripen
         vector_store = PineconeVectorStore(pinecone_index=pinecone_index, namespace='pripen')
@@ -40,7 +41,7 @@ def Insert_Violation():
     except openai.error.OpenAIError as e:
         print(f"OpenAI API 오류: {e}")
         return False
-    except pinecone.core.PineconeError as e:
+    except pc.core.PineconeError as e:
         print(f"Pinecone 관련 오류: {e}")
         return False
     except Exception as e:

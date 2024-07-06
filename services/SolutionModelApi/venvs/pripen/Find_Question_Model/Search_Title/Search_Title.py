@@ -10,10 +10,9 @@ from .Rule_Validation.Rule_Validation import *
 
 import sys
 import os
-import time
 import config
+import time
 api_key = os.getenv("OPENAI_API_KEY")
-
 
 # 컷팅할 목차 저장하는 전역변수(한번 컷팅하면 계속 이거로 씀)
 table = ""
@@ -22,14 +21,14 @@ table = ""
 def Search_Table(docs):
     gpt_prompt = get_table(docs)
     message = [{"role": "user", "content": gpt_prompt}]
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-4",
         messages=message,
         temperature=0,
         max_tokens=500,
         frequency_penalty=0.0
     )
-    ans = response['choices'][0]['message']['content']
+    ans = response.choices[0].message.content
     print("GPT출력값: ", ans,"\n")
     if(ans=='<목차없음>'):
         return ('LLM', ans) #목차를 찾을 수 없는경우 LLM으로 Find
@@ -110,7 +109,7 @@ def Search_Title_With_Table(docs, table_title_list):
 
             gpt_prompt = title_create_prompt_part_with_table(docs[i].page_content, table_title_list)
             message = [{"role": "user", "content": gpt_prompt}]
-            response = openai.ChatCompletion.create(
+            response = openai.chat.completions.create(
                 model="gpt-4",
                 messages=message,
                 temperature=0,
@@ -119,7 +118,7 @@ def Search_Title_With_Table(docs, table_title_list):
             )
             time.sleep(30) # openai의 정책상 딜레이줌(계속 실험하면서 조정 예정)
 
-            title_list += ast.literal_eval((response['choices'][0]['message']['content'])) # 리스트에 계속 추가
+            title_list += ast.literal_eval(response.choices[0].message.content) # 리스트에 계속 추가
 
             # 중복제거 필요(chunk로 끊을때 오버래핑 하여서 제목 추출할때 중복이 있을 수 있음)
             [No_Duplication_title_list.append(item) for item in title_list if item not in No_Duplication_title_list]
@@ -131,14 +130,14 @@ def Search_Title_With_Table(docs, table_title_list):
             gpt_prompt = title_create_prompt_only_with_table(docs[i].page_content, table_title_list)
 
             message = [{"role": "user", "content": gpt_prompt}]
-            response = openai.ChatCompletion.create(
+            response = openai.chat.completions.create(
                 model="gpt-4",
                 messages=message,
                 temperature=0,
                 max_tokens=1000,
                 frequency_penalty=0.0
             )
-            title_list = ast.literal_eval((response['choices'][0]['message']['content']))
+            title_list = ast.literal_eval(response.choices[0].message.content)
             print("chunk가 1개일때 목차 기반으로 추출한 대제목 리스트:", title_list)
             No_Duplication_title_list = title_list
     return No_Duplication_title_list
@@ -161,15 +160,15 @@ def Search_Title_With_Rule(docs, rule):
                 gpt_prompt = title_create_prompt_part(docs[i].page_content, rule, title_list)
 
             message = [{"role": "user", "content": gpt_prompt}]
-            response = openai.ChatCompletion.create(
-                model="gpt-4",
+            response = openai.chat.completions.create(
+                model="gpt-4o",
                 messages=message,
                 temperature=0,
                 max_tokens=1000,
                 frequency_penalty=0.0
             )
             time.sleep(30) # openai의 정책상 딜레이줌(계속 실험하면서 조정 예정)
-            title_list += ast.literal_eval((response['choices'][0]['message']['content'])) # 리스트에 계속 추가
+            title_list += ast.literal_eval((response.choices[0].message.content)) # 리스트에 계속 추가
 
             # 중복제거 필요(chunk가 많아지면 오버래핑하여서 제목 추출할때 중복 될 수 있음)
             [No_Duplication_title_list.append(item) for item in title_list if item not in No_Duplication_title_list]
@@ -181,14 +180,14 @@ def Search_Title_With_Rule(docs, rule):
             gpt_prompt = title_create_prompt_only(docs[i].page_content, rule)
             print("rule입니다.", rule)
             message = [{"role": "user", "content": gpt_prompt}]
-            response = openai.ChatCompletion.create(
-                model="gpt-4",
+            response = openai.chat.completions.create(
+                model="gpt-4o",
                 messages=message,
                 temperature=0,
                 max_tokens=1000,
                 frequency_penalty=0.0
             )
-            title_list = ast.literal_eval((response['choices'][0]['message']['content']))
+            title_list = ast.literal_eval(response.choices[0].message.content)
             print("chunk가 1개일때 룰셋 대제목 기반으로 추출한 대제목 리스트:", title_list)
             No_Duplication_title_list = title_list
 
