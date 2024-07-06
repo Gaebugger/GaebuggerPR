@@ -161,7 +161,7 @@ def Search_Title_With_Rule(docs, rule):
 
             message = [{"role": "user", "content": gpt_prompt}]
             response = openai.chat.completions.create(
-                model="gpt-4o",
+                model="gpt-4",
                 messages=message,
                 temperature=0,
                 max_tokens=1000,
@@ -181,7 +181,7 @@ def Search_Title_With_Rule(docs, rule):
             print("rule입니다.", rule)
             message = [{"role": "user", "content": gpt_prompt}]
             response = openai.chat.completions.create(
-                model="gpt-4o",
+                model="gpt-4",
                 messages=message,
                 temperature=0,
                 max_tokens=1000,
