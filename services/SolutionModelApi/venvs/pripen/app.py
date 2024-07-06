@@ -70,6 +70,7 @@ def process_text(request: ProcessTextRequest):
     print(final_answer_text)
 
     # 벡터DB에 재진단 데이터 삽입
+
     DB_Insert = VectorDB_Frame(final_answer_text)
     if(DB_Insert == True):
         print("벡터 DB삽입에 성공하였습니다.")

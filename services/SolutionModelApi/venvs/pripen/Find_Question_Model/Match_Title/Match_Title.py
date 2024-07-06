@@ -15,13 +15,13 @@ api_key = os.getenv("OPENAI_API_KEY")
 def Match_Title(title_list, rule):
     gpt_prompt = match_create_prompt(title_list, rule)
     message = [{"role": "user", "content": gpt_prompt}]
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-4",
         messages=message,
         temperature=0.1,
         max_tokens=4096,
         frequency_penalty=0.0
     )
-    print((response['choices'][0]['message']['content']),"은 Match에서의 LLM의 응답입니다.")
-    title_dict = ast.literal_eval((response['choices'][0]['message']['content']))
+    print((response.choices[0].message.content),"은 Match에서의 LLM의 응답입니다.")
+    title_dict = ast.literal_eval(response.choices[0].message.content)
     return title_dict
