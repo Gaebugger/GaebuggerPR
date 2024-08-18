@@ -1,4 +1,4 @@
-## PRIPEN | 개인정보 처리방침 평가 대비 솔루션
+## PriPen | 개인정보 처리방침 평가 대비 솔루션
 
 ![Desktop - 2](https://github.com/user-attachments/assets/9ab1f707-bc8f-4c34-bddc-b9a7c2bb4e50)
 <br/>
@@ -17,6 +17,8 @@
 - 2023.12.16 1차 배포
 
 - 2023.12.27 2차 배포
+
+- 2023.12.31 프로젝트 종료
 
 <br/>
 <br/>
