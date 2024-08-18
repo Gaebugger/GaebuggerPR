@@ -26,8 +26,8 @@
 |이선민|김재윤|김윤서|여신호|송창욱|정민규|
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |<img src="https://github.com/user-attachments/assets/3c3257f2-166b-4086-9770-5cd71598dcdd" width="130">|<img src="https://github.com/user-attachments/assets/81fd0113-a629-403a-9647-882bfe9616b8" width="140">|<img src="https://github.com/user-attachments/assets/4a926fd3-52e1-4b77-9421-65630367be98" width="140">|<img src="https://github.com/user-attachments/assets/3d555e88-0017-461c-b4a9-3aa8fcb6c7e1" width="130">|<img src="https://github.com/user-attachments/assets/76e517ea-46c2-44a1-8d7c-da166cebb98f" width="140">|<img src="https://github.com/user-attachments/assets/e9ee08d3-08e1-4b45-a3e2-21d98b9c3e6d" width="120">|
-|<span style="font-size:2px !important;">프로젝트 관리<br/>데이터분석</span>|데이터분석|데이터분석|풀스택<br/>인프라|솔루션 개발|챗봇 개발|
-|성신여자대학교<br/>융합보안공학|<중앙대학교<br/>산업보안학과</font>|고려대학교<br/>인공지능보안학과|세종대학교<br/>정보보안학과|중앙대학교<br/>산업보안학과|선린인터넷고등학교<br/>정보보호학|
+|<div style="width:10px;">프로젝트 관리<br/>데이터분석</div>|데이터분석|데이터분석|풀스택<br/>인프라|솔루션 개발|챗봇 개발|
+|성신여자대학교<br/>융합보안공학|중앙대학교<br/>산업보안학과</font>|고려대학교<br/>인공지능보안학과|세종대학교<br/>정보보안학과|중앙대학교<br/>산업보안학과|<div style="width:200px;">선린인터넷고등학교<br/>정보보호학</div>|
 <br/>
 <br/>
 
