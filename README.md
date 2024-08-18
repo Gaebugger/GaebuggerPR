@@ -17,7 +17,7 @@
 
 |이선민|김재윤|김윤서|여신호|송창욱|정민규|
 |:---:|:---:|:---:|:---:|:---:|:---:|
-|<img src="https://github.com/user-attachments/assets/3c3257f2-166b-4086-9770-5cd71598dcdd" width="120">|<img src="https://github.com/user-attachments/assets/81fd0113-a629-403a-9647-882bfe9616b8" width="130">|<img src="https://github.com/user-attachments/assets/4a926fd3-52e1-4b77-9421-65630367be98" width="130">|<img src="https://github.com/user-attachments/assets/3d555e88-0017-461c-b4a9-3aa8fcb6c7e1" width="130">|<img src="https://github.com/user-attachments/assets/76e517ea-46c2-44a1-8d7c-da166cebb98f" width="120">|<img src="https://github.com/user-attachments/assets/e9ee08d3-08e1-4b45-a3e2-21d98b9c3e6d" width="120">|
+|<img src="https://github.com/user-attachments/assets/3c3257f2-166b-4086-9770-5cd71598dcdd" width="130">|<img src="https://github.com/user-attachments/assets/81fd0113-a629-403a-9647-882bfe9616b8" width="140">|<img src="https://github.com/user-attachments/assets/4a926fd3-52e1-4b77-9421-65630367be98" width="140">|<img src="https://github.com/user-attachments/assets/3d555e88-0017-461c-b4a9-3aa8fcb6c7e1" width="130">|<img src="https://github.com/user-attachments/assets/76e517ea-46c2-44a1-8d7c-da166cebb98f" width="140">|<img src="https://github.com/user-attachments/assets/e9ee08d3-08e1-4b45-a3e2-21d98b9c3e6d" width="120">|
 |프로젝트 관리<br/>데이터 분석/생성|데이터 분석/생성|데이터 분석/생성|프론트엔드/백엔드<br/>인프라|언어모델 개발|챗봇 개발|
 |팀장|룰셋제작|룰셋제작|BE,FE,Infra|LLM|Chatbot|
 <br/>
